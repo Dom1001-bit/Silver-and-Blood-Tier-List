@@ -46,11 +46,11 @@
             background-color: #44403C;
             cursor: not-allowed;
         }
-        .tier-sss { background-color: #7f1d1d; border-left-color: #fca5a5; color: white; }
-        .tier-s { background-color: #7c2d12; border-left-color: #fdba74; color: white; }
-        .tier-a { background-color: #14532d; border-left-color: #86efac; color: white; }
-        .tier-b { background-color: #1e3a8a; border-left-color: #93c5fd; color: white; }
-        .tier-c { background-color: #374151; border-left-color: #9ca3af; color: white; }
+        .tier-s { background-color: #7f1d1d; border-left-color: #fca5a5; color: white; }
+        .tier-a { background-color: #7c2d12; border-left-color: #fdba74; color: white; }
+        .tier-b { background-color: #14532d; border-left-color: #86efac; color: white; }
+        .tier-c { background-color: #1e3a8a; border-left-color: #93c5fd; color: white; }
+        .tier-d { background-color: #374151; border-left-color: #9ca3af; color: white; }
         .tier-f { background-color: #1f2937; border-left-color: #6b7280; color: white; }
         .chart-container {
             position: relative; width: 100%; max-width: 400px; margin-left: auto; margin-right: auto; height: 350px; max-height: 400px;
@@ -104,7 +104,7 @@
             <div class="hidden md:flex items-center space-x-6">
                 <a href="#overview" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Overview</a>
                 <a href="#tier-list" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Tier List</a>
-                <a href="#mechanics" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Mechanics</a>
+                <a href="#mechanics" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Progression</a>
                 <a href="#team-compositions" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Compositions</a>
                 <a href="#team-builder" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Team Builder</a>
                 <a href="#summoning" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Summoning</a>
@@ -116,6 +116,7 @@
         <div id="mobile-menu" class="hidden md:hidden bg-stone-900">
              <a href="#overview" class="block text-stone-300 text-center py-2">Overview</a>
              <a href="#tier-list" class="block text-stone-300 text-center py-2">Tier List</a>
+             <a href="#mechanics" class="block text-stone-300 text-center py-2">Progression</a>
              <a href="#team-compositions" class="block text-stone-300 text-center py-2">Compositions</a>
              <a href="#team-builder" class="block text-stone-300 text-center py-2">Team Builder</a>
              <a href="#summoning" class="block text-stone-300 text-center py-2">Summoning</a>
@@ -134,7 +135,7 @@
         <div class="container mx-auto p-4 md:p-8">
             <section id="overview" class="my-12 scroll-mt-24">
                 <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 text-header">The Path to Power</h2>
-                <p class="max-w-3xl mx-auto text-center text-lg text-stone-300">This guide illuminates the true nature of strategy in *Silver and Blood*. True power is forged before the first blow is struck, in the meticulous preparation of your team. Mastering the intricate synergies between Vassals—their Factions, Classes, and Moon Phases—is the ultimate expression of skill.</p>
+                <p class="max-w-3xl mx-auto text-center text-lg text-stone-300">Welcome to the definitive guide for *Silver and Blood*. While the game presents itself as a "Complex Strategy RPG," its true depth lies not in moment-to-moment combat, but in meticulous pre-battle preparation. This guide will help you master the intricate synergies between Factions, Classes, Moon Phases, and unique character mechanics to build the most effective teams and conquer all PVE content.</p>
             </section>
 
             <section id="tier-list" class="my-16 scroll-mt-24">
@@ -180,34 +181,51 @@
             </section>
             
             <section id="mechanics" class="my-16 scroll-mt-24">
-                <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-header">The Pillars of Power</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-header">Core Systems & Daily Progression</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 mb-8">
                     <div class="bg-card p-6 rounded-lg shadow-lg">
-                        <h3 class="text-2xl font-bold mb-4 text-center">Core Synergies</h3>
+                        <h3 class="text-2xl font-bold mb-4 text-center">Gameplay Mechanics</h3>
                         <div class="space-y-4">
                             <div>
-                                <h4 class="font-bold text-lg text-header">Factions & Classes</h4>
-                                <p class="text-muted">Deploying multiple Vassals from the same Faction unlocks powerful passive stat boosts. A balanced team of different Classes (Tank, Healer, DPS) is essential for handling all content.</p>
+                                <h4 class="font-bold text-lg text-header">Factions, Classes & Blood Moon</h4>
+                                <p class="text-muted">Mastering the synergy between your team's Factions, Class balance, and Moon Phase alignment (to activate the Blood Moon) is the absolute key to victory.</p>
                             </div>
                             <div>
-                                <h4 class="font-bold text-lg text-header">The Blood Moon</h4>
-                                <p class="text-muted">The secret weapon. Including one of each Moon Phase (Waxing, Half, Full) in your team triggers the Blood Moon, reducing ultimate costs and boosting damage.</p>
+                                <h4 class="font-bold text-lg text-header">The "160 Wall" & Transfusion</h4>
+                                <p class="text-muted">You cannot level units past 160 without acquiring three duplicates. The Transfusion system syncs your roster's level to your five highest-level units. Your primary long-term goal is breaking this "160 wall" by getting 3 duplicates for five different SSR Vassals.</p>
                             </div>
                              <div>
-                                <h4 class="font-bold text-lg text-header">Sanity System</h4>
-                                <p class="text-muted">Certain Vassals have a Sanity bar. At max Sanity, they may transform or gain powerful new abilities. Managing Sanity generation and expenditure is a key tactical layer for these characters.</p>
+                                <h4 class="font-bold text-lg text-header">Damage & Unique Effects</h4>
+                                <p class="text-muted">Look beyond base stats. True Damage (ignores DEF), Sanity (transformation mechanic), and Dodge (evasion) are powerful effects that define top-tier units and enable advanced strategies.</p>
                             </div>
                         </div>
                     </div>
                     <div class="bg-card p-6 rounded-lg shadow-lg">
-                        <h3 class="text-2xl font-bold mb-4 text-center">Damage Principles</h3>
-                        <p class="text-muted mb-4">Damage is not a simple number. It's a combination of factors you can influence through strategic team building. Maximizing these is key to victory.</p>
+                        <h3 class="text-2xl font-bold mb-4 text-center">Equipment & Observatory</h3>
+                        <p class="text-muted mb-4">Gear is a major power vector. As a new player, do not waste resources upgrading early-game gear. Save materials for endgame equipment.</p>
                          <ul class="list-disc list-inside space-y-2 text-stone-300">
-                            <li><strong class="text-white">Base Stats & Skills:</strong> A Vassal's core damage multiplied by their skill effects.</li>
-                             <li><strong class="text-white">True Damage:</strong> A powerful damage type that ignores enemy DEF and DEF Rate, making it invaluable against heavily armored bosses. Vassals like Silvan Vetia specialize in this.</li>
-                            <li><strong class="text-white">Enchanter Buffs:</strong> Temporary, high-impact boosts to Attack, Crit Rate, and Crit Damage from support units like Acappella.</li>
-                            <li><strong class="text-white">Positional & Dodge Mechanics:</strong> Some Vassals, like Van Helsing, gain damage from specific positions. Others, like Gilrain, leverage Dodge to not only survive but also trigger counter-attacks or special effects.</li>
+                            <li><strong class="text-white">Endgame Gear:</strong> Your goal is to acquire final-rarity equipment that matches BOTH a Vassal's weight class (Light, Medium, Heavy) AND their Faction.</li>
+                            <li><strong class="text-white">Binding:</strong> Max-level, matching equipment can be permanently bound to a Vassal for a massive, permanent power boost.</li>
+                            <li><strong class="text-white">Observatory:</strong> This is an endgame gold sink. Early on, only upgrade it to unlock more Transfusion slots. Max it out later for incremental bonuses.</li>
                         </ul>
+                    </div>
+                </div>
+                 <div class="bg-card p-6 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4 text-center">Daily Progression Loop</h3>
+                    <p class="text-muted mb-4 text-center">Your daily goal is to push the main campaign to increase your idle rewards and complete these key activities.</p>
+                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                        <div>
+                            <h4 class="text-lg font-bold text-header">Moonlight Tribute</h4>
+                            <p class="text-sm text-muted">Your idle rewards chest. Builds up for 24 hours. The further you are in the campaign, the more resources it generates.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-header">Timeworn Mausoleum</h4>
+                            <p class="text-sm text-muted">Your primary source of skill upgrade materials. Complete the five floors daily to the best of your ability.</p>
+                        </div>
+                         <div>
+                            <h4 class="text-lg font-bold text-header">Tomb of the Fallen</h4>
+                            <p class="text-sm text-muted">Your source for equipment and upgrade materials. Challenge three times daily to get gear.</p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -257,25 +275,33 @@
                         <h3 class="text-2xl font-bold mb-4 text-center">Banner Strategy</h3>
                         <div class="space-y-4">
                             <div>
-                                <h4 class="font-bold text-lg text-header">Crimson Curse (Rate-Up Banner)</h4>
-                                <p class="text-muted text-sm">This is the premium, limited-time banner where you should spend your primary summoning currency, **Tears of the Moon**. It features a specific SSS-Tier Vassal with a 50% chance of being the SSR you pull. Always save your Tears for a Vassal that will significantly improve your team.</p>
+                                <h4 class="font-bold text-lg text-header">Crimson Curse (Rate-Up)</h4>
+                                <p class="text-muted text-sm">Uses **Vestige** scrolls or **Tears**. This is the premium banner where you spend Tears. Always save your Tears for a meta-defining Vassal that fills a critical gap in your team.</p>
                             </div>
                             <div>
-                                <h4 class="font-bold text-lg text-header">Blue Dawn (Standard Banner)</h4>
-                                <p class="text-muted text-sm">Blue Dawn is your typical standard banner in gacha games that uses **Soothing Scrolls** as its pull currency. You don’t want to spend Tears on this banner; at endgame you only pull on it using free Soothing Scrolls, maybe once or twice a week, to complete weekly missions or dailies, or if you’re a new player in desperate need of dupes or new characters to fill out your roster.</p>
+                                <h4 class="font-bold text-lg text-header">Blue Dawn (Standard)</h4>
+                                <p class="text-muted text-sm">Uses **Soothing Scrolls**. Avoid spending Tears here. This banner is for completing dailies/weeklies or for new players to fill out their initial roster.</p>
+                            </div>
+                             <div>
+                                <h4 class="font-bold text-lg text-header">Echo Shop (Pity)</h4>
+                                <p class="text-muted text-sm">Each pull gives you one ticket for that banner type. 200 tickets can be used to guarantee a character. Save these tickets for limited collab/holiday units or a vital Ancestor Vassal.</p>
                             </div>
                         </div>
                     </div>
                      <div class="bg-card p-6 rounded-lg shadow-lg">
-                        <h3 class="text-2xl font-bold mb-4 text-center">Pity System & Events</h3>
+                        <h3 class="text-2xl font-bold mb-4 text-center">Reroll Strategy</h3>
                          <div class="space-y-4">
                             <div>
-                                <h4 class="font-bold text-lg text-header">Pity System Explained</h4>
-                                <p class="text-muted text-sm">Your luck is protected by a pity system. You are guaranteed to receive at least one **SR Vassal every 10 summons**, and one **SSR Vassal every 80 summons**. This pity count is separate for each banner type and resets to zero after you pull an SSR.</p>
+                                <h4 class="font-bold text-lg text-header">Starting Strong</h4>
+                                <p class="text-muted text-sm">For the best possible start, reroll your account by playing the tutorial until you can summon. Your goal is to acquire a meta-defining S-Tier unit that will accelerate your progress significantly.</p>
                             </div>
                             <div>
-                                <h4 class="font-bold text-lg text-header">Current Event: Silvan Vetia Rate-Up</h4>
-                                <p id="event-timer" class="text-muted text-sm">The "Crimson Curse" banner currently features **Silvan Vetia**. A top-tier True Damage dealer, she is an S-Tier priority for any account needing to counter heavily armored raid bosses. Banner ends: <span class="font-bold text-white">July 25, 2025</span>.</p>
+                                <h4 class="font-bold text-lg text-header">Top Reroll Targets</h4>
+                                <ul class="list-disc list-inside text-stone-300">
+                                    <li><strong class="text-white">Acappella:</strong> The single best long-term investment. A premier healer/buffer is always relevant.</li>
+                                    <li><strong class="text-white">Agares: Incendiary:</strong> The best AoE DPS for fast campaign clearing and resource farming.</li>
+                                    <li><strong class="text-white">Lamia:</strong> An elite DPS who excels in all content and enables team-wide lifesteal with the Blood Moon buff.</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -324,32 +350,47 @@
 
 <script>
 const vassalData = [
-    { id:1, tier: 'SSS', name: 'Acappella', rarity: 'SSR', faction: 'Church', class: 'Enchanter', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/acappella.webp' },
-    { id:2, tier: 'SSS', name: 'Agares: Incendiary', rarity: 'SSR+', faction: 'Ancestors', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/agares-incendiary.webp' },
-    { id:3, tier: 'SSS', name: 'Ami: Transcendent', rarity: 'SSR+', faction: 'Ancestors', class: 'Guardian', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/ami-transcendent.webp' },
+    { id:1, tier: 'S', name: 'Acappella', rarity: 'SSR', faction: 'Church', class: 'Enchanter', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/acappella.webp' },
+    { id:2, tier: 'S', name: 'Agares: Incendiary', rarity: 'SSR+', faction: 'Ancestors', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/agares-incendiary.webp' },
+    { id:3, tier: 'S', name: 'Ami: Transcendent', rarity: 'SSR+', faction: 'Ancestors', class: 'Guardian', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/ami-transcendent.webp' },
     { id:4, tier: 'S', name: 'Lamia', rarity: 'SSR', faction: 'Kingdom', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/lamia.webp' },
-    { id:5, tier: 'SSS', name: 'Noah: Transcendent', rarity: 'SSR+', faction: 'Ancestors', class: 'Hunter', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/noah-transcendent.webp' },
+    { id:5, tier: 'S', name: 'Noah: Transcendent', rarity: 'SSR+', faction: 'Ancestors', class: 'Hunter', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/noah-transcendent.webp' },
     { id:6, tier: 'S', name: 'Seth', rarity: 'SSR', faction: 'Ancestors', class: 'Enchanter', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/seth.webp' },
-    { id:7, tier: 'SSS', name: 'Van Helsing', rarity: 'SSR', faction: 'Church', class: 'Hunter', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/van-helsing.webp' },
+    { id:7, tier: 'S', name: 'Van Helsing', rarity: 'SSR', faction: 'Church', class: 'Hunter', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/van-helsing.webp' },
     { id:8, tier: 'A', name: 'Ami', rarity: 'SSR', faction: 'Kingdom', class: 'Enchanter', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/ami.webp' },
-    { id:9, tier: 'B', name: 'Bella', rarity: 'SSR', faction: 'Bloodborn', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/bella.webp' },
-    { id:10, tier: 'A', name: 'Darcias', rarity: 'SSR', faction: 'Church', class: 'Warrior', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/darcias.webp' },
-    { id:11, tier: 'S', name: 'Gilrain', rarity: 'SSR', faction: 'Kingdom', class: 'Assassin', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/gilrain.webp' },
-    { id:12, tier: 'S', name: 'Hati: Transcendent', rarity: 'SSR+', faction: 'Ancestors', class: 'Warrior', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/hati-transcendent.webp' },
-    { id:13, tier: 'A', name: 'Hati', rarity: 'SSR', faction: 'Kingdom', class: 'Assassin', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/hati.webp' },
+    { id:9, tier: 'A', name: 'Darcias', rarity: 'SSR', faction: 'Church', class: 'Warrior', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/darcias.webp' },
+    { id:10, tier: 'A', name: 'Gilrain', rarity: 'SSR', faction: 'Kingdom', class: 'Assassin', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/gilrain.webp' },
+    { id:11, tier: 'S', name: 'Hati: Transcendent', rarity: 'SSR+', faction: 'Ancestors', class: 'Warrior', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/hati-transcendent.webp' },
+    { id:12, tier: 'B', name: 'Hati', rarity: 'SSR', faction: 'Kingdom', class: 'Assassin', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/hati.webp' },
+    { id:13, tier: 'B', name: 'Joan', rarity: 'SR', faction: 'Church', class: 'Warrior', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/joan.webp' },
     { id:14, tier: 'B', name: 'Jestel', rarity: 'SR', faction: 'Bloodborn', class: 'Guardian', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/jestel.webp' },
-    { id:15, tier: 'B', name: 'Selena', rarity: 'SR', faction: 'Church', class: 'Hunter', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/selena.webp' },
-    { id:16, tier: 'B', name: 'Aiona', rarity: 'SR', faction: 'Bloodborn', class: 'Enchanter', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/aiona.webp' },
-    { id:17, tier: 'C', name: 'Empousa', rarity: 'SR', faction: 'Bloodborn', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/empousa.webp' },
-    { id:18, tier: 'B', name: 'Joan', rarity: 'SR', faction: 'Church', class: 'Warrior', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/joan.webp' },
-    { id:19, tier: 'S', name: 'Spectral Gilrain', rarity: 'SSR', faction: 'Bloodborn', class: 'Assassin', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/spectral-gilrain.webp' },
-    { id:20, tier: 'A', name: 'Augustine', rarity: 'SSR', faction: 'Bloodborn', class: 'Warrior', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/augustine.webp' },
-    { id:21, tier: 'A', name: 'Cecia', rarity: 'SSR', faction: 'Kingdom', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/cecia.webp' },
-    { id:22, tier: 'S', name: 'Limine', rarity: 'SSR', faction: 'Ancestors', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/limine.webp' },
-    { id:23, tier: 'S', name: 'Silvan Vetia', rarity: 'SSR', faction: 'Bloodborn', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/silvan-vetia.webp' },
-    { id:24, tier: 'S', name: 'Friedrich', rarity: 'SSR', faction: 'Kingdom', class: 'Guardian', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/friedrich.webp' },
-    { id:25, tier: 'A', name: 'Theophane', rarity: 'SSR', faction: 'Church', class: 'Guardian', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/theophane.webp' },
-    // Adding R-tier vassals for gacha pool
+    { id:15, tier: 'A', name: 'Selena', rarity: 'SR', faction: 'Church', class: 'Hunter', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/selena.webp' },
+    { id:16, tier: 'C', name: 'Aiona', rarity: 'SR', faction: 'Bloodborn', class: 'Enchanter', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/aiona.webp' },
+    { id:17, tier: 'D', name: 'Empousa', rarity: 'SR', faction: 'Bloodborn', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/empousa.webp' },
+    { id:18, tier: 'A', name: 'Spectral Gilrain', rarity: 'SSR', faction: 'Bloodborn', class: 'Assassin', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/spectral-gilrain.webp' },
+    { id:19, tier: 'A', name: 'Limine', rarity: 'SSR', faction: 'Ancestors', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/limine.webp' },
+    { id:20, tier: 'A', name: 'Silvan Vetia', rarity: 'SSR', faction: 'Bloodborn', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/silvan-vetia.webp' },
+    { id:21, tier: 'A', name: 'Friedrich', rarity: 'SSR', faction: 'Kingdom', class: 'Guardian', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/friedrich.webp' },
+    { id:22, tier: 'B', name: 'Theophane', rarity: 'SSR', faction: 'Church', class: 'Guardian', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/theophane.webp' },
+    { id:23, tier: 'C', name: 'Augustine', rarity: 'SSR', faction: 'Bloodborn', class: 'Warrior', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/augustine.webp' },
+    { id:24, tier: 'C', name: 'Cecia', rarity: 'SSR', faction: 'Kingdom', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/cecia.webp' },
+    { id:25, tier: 'A', name: 'Agares', rarity: 'SSR', faction: 'Church', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/agares.webp'},
+    { id:26, tier: 'B', name: 'Cain', rarity: 'SSR', faction: 'Bloodborn', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/cain.webp'},
+    { id:27, tier: 'D', name: 'Dalcarlo', rarity: 'SSR', faction: 'Bloodborn', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/dalcarlo.webp'},
+    { id:28, tier: 'A', name: 'Edina', rarity: 'SSR', faction: 'Church', class: 'Enchanter', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/edina.webp'},
+    { id:29, tier: 'C', name: 'Ressa', rarity: 'SR', faction: 'Kingdom', class: 'Warrior', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/ressa.webp'},
+    { id:30, tier: 'C', name: 'Baphomet', rarity: 'SR', faction: 'Bloodborn', class: 'Warrior', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/baphomet.webp'},
+    { id:31, tier: 'D', name: 'Mass', rarity: 'SSR', faction: 'Bloodborn', class: 'Assassin', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/mass.webp'},
+    { id:32, tier: 'C', name: 'Ottavia', rarity: 'SR', faction: 'Church', class: 'Warrior', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/ottavia.webp'},
+    { id:33, tier: 'C', name: 'Pavana', rarity: 'SR', faction: 'Church', class: 'Enchanter', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/pavana.webp'},
+    { id:34, tier: 'C', name: 'Tris', rarity: 'SR', faction: 'Church', class: 'Hunter', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/tris.webp'},
+    { id:35, tier: 'C', name: 'Yggdrasill', rarity: 'SSR', faction: 'Church', class: 'Guardian', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/yggdrasill.webp'},
+    { id:36, tier: 'F', name: 'Clive', rarity: 'SR', faction: 'Kingdom', class: 'Guardian', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/clive.webp'},
+    { id:37, tier: 'F', name: 'Gadric', rarity: 'SR', faction: 'Church', class: 'Warrior', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/gadric.webp'},
+    { id:38, tier: 'F', name: 'Goldland', rarity: 'SR', faction: 'Kingdom', class: 'Hunter', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/goldland.webp'},
+    { id:39, tier: 'F', name: 'Noah', rarity: 'SR', faction: 'Bloodborn', class: 'Warrior', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/noah.webp'},
+    { id:40, tier: 'F', name: 'Clive JR.', rarity: 'SR', faction: 'Kingdom', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/clive-jr.webp'},
+    { id:41, tier: 'F', name: 'Setti', rarity: 'SR', faction: 'Bloodborn', class: 'Hunter', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/setti.webp'},
     { id: 101, tier: 'F', name: 'Guard', rarity: 'R', faction: 'Kingdom', class: 'Warrior', moon: 'Half Moon', image: 'https://placehold.co/150x150/6b7280/1f2937?text=Guard' },
     { id: 102, tier: 'F', name: 'Acolyte', rarity: 'R', faction: 'Church', class: 'Enchanter', moon: 'Waxing Moon', image: 'https://placehold.co/150x150/6b7280/1f2937?text=Acolyte' },
     { id: 103, tier: 'F', name: 'Scout', rarity: 'R', faction: 'Bloodborn', class: 'Hunter', moon: 'Full Moon', image: 'https://placehold.co/150x150/6b7280/1f2937?text=Scout' },
@@ -357,12 +398,15 @@ const vassalData = [
 ];
 
 const vassalDetails = {
-    'Joan': 'Discrepancy in ranking exists. Ranked SSS elsewhere, likely for PvP or early-game dominance. For PVE end-game, she is a solid early investment but falls off compared to specialized tanks. A versatile and resilient frontline unit.',
-    'Van Helsing': 'Exemplifies positional strategy. Deals significantly more damage if no allies are in the two tiles in front of him, rewarding careful, high-risk team formations.',
-    'Noah: Transcendent': 'Premier physical DPS who can also summon allies. These summons provide immense tactical value as blockers, decoys, or extra damage sources, offering unparalleled board control.',
-    'Agares: Incendiary': 'The game\'s top AoE magical DPS. Essential for clearing waves of enemies quickly and efficiently. His high survivability makes him less reliant on constant protection.',
-    'Acappella': 'The cornerstone of any top-tier team. Provides powerful healing and a suite of offensive and defensive buffs that multiply the effectiveness of the entire team. Arguably the highest priority Vassal to acquire.',
-    'Silvan Vetia': 'A top-tier Sorcerer who specializes in dealing True Damage, which ignores enemy DEF stats. This makes her an elite boss-killer, particularly against heavily armored raid bosses where normal damage is heavily reduced. Her unique, though controversial, design also makes her a popular character.'
+    'Acappella': 'She buffs, she heals, and she lets you gain bloodsoul faster. She is currently the most effective support player available. No other character matches her buffs.',
+    'Agares: Incendiary': 'A rebirth-style pseudo DPS/sub-tank. He allows for clutch moments because his rebirth duration is fully immune to damage and has good single-target damage after rebirth.',
+    'Ami: Transcendent': 'Best tank, as she is able to both apply stuns and move enemies across the board. She excels in stages where there are no bosses, but is also just a good tank for boss content.',
+    'Lamia': 'The upcoming rate-up character, she was the go-to DPS for every mode in beta. She provides great single-target damage and area of effect with ricocheting projectiles; she also provides a team-wide lifesteal effect when Blood Moon is active.',
+    'Noah: Transcendent': '2nd best DPS. He has summons that share the damage he receives, and his ultimate changes target if one enemy dies. He excels in hitting single targets and also performs well in Area of Effect content. Extremely potent in summon comps.',
+    'Seth': 'Best \'pure\' healer. She reverts your team\'s HP to the previous state three seconds ago (and cleanses debuffs). At a high power deficit where your characters are weakened, the first few seconds of a fight your front line is prone to burst, and she shines in negating that aspect.',
+    'Van Helsing': 'High investment unit, but once at endgame, he becomes OP as long as you crit often enough. Great single target with AoE damage which increases based on enemies killed.',
+    'Hati: Transcendent': 'The savior of DoT, her abilities allow her to detonate damage over time applied both by her and other units, allowing her to turn mediocre characters like Darcius and Nicole into true damage threats.',
+    'Silvan Vetia': 'A top-tier Sorcerer who specializes in dealing True Damage, which ignores enemy DEF stats. This makes her an elite boss-killer, particularly against heavily armored raid bosses where normal damage is heavily reduced.'
 };
 
 const vassalSynergies = {
@@ -415,7 +459,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const state = {
-        tierOrder: ['SSS', 'S', 'A', 'B', 'C', 'F'],
+        tierOrder: ['S', 'A', 'B', 'C', 'D', 'F'],
         factionOrder: ['Ancestors', 'Church', 'Bloodborn', 'Kingdom'],
         classOrder: ['Guardian', 'Warrior', 'Assassin', 'Hunter', 'Sorcerer', 'Enchanter'],
         moonOrder: ['Waxing Moon', 'Half Moon', 'Full Moon'],
@@ -428,7 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 r: vassalData.filter(v => v.rarity === 'R')
             },
             rates: { ssr: 0.025, sr: 0.15 },
-            rateUpVassal: vassalData.find(v => v.name === 'Silvan Vetia')
+            rateUpVassal: vassalData.find(v => v.name === 'Lamia')
         }
     };
     
