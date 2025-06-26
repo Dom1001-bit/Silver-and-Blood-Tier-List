@@ -10,12 +10,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Gothic Harmony -->
-    <!-- Application Structure Plan: A top-navigated, single-page application with distinct sections for different user goals. The structure starts with a high-level strategic summary, then allows users to dive into the core feature: an interactive, filterable Vassal Tier List. From there, users can explore related content like a deep dive into Game Mechanics (explained visually), practical Team Building examples (now expanded with a tabbed interface for different content types), detailed profiles of Top-Tier Vassals, and a new interactive Team Builder tool. This non-linear, task-oriented structure was chosen because players have different needs: a new player might start with Mechanics, while a veteran might jump straight to the Team Builder to theorycraft. The flow encourages exploration and makes finding specific information fast and intuitive. -->
+    <!-- Application Structure Plan: A top-navigated, single-page application with distinct sections for different user goals. The structure starts with a high-level strategic summary, then allows users to dive into the core feature: an interactive, filterable Vassal Tier List. From there, users can explore related content like a deep dive into Game Mechanics (explained visually), practical Team Building examples (now expanded with a tabbed interface for different content types), detailed profiles of Top-Tier Vassals, and a new interactive Team Builder tool. The latest addition is the "Summoning Circle", a comprehensive gacha simulator and strategy guide. This non-linear, task-oriented structure was chosen because players have different needs: a new player might start with Mechanics, while a veteran might jump straight to the Team Builder or Gacha Simulator to theorycraft. The flow encourages exploration and makes finding specific information fast and intuitive. -->
     <!-- Visualization & Content Choices: 
         - Report Info: Comprehensive Vassal Tier List -> Goal: Organize, Compare, Explore -> Viz/Presentation Method: Interactive HTML table with filters, search, and character portraits. -> Interaction: Dropdown filters for Tier, Faction, Class; text search; clickable rows to show detailed modal with larger image and new Synergy section. -> Justification: Transforms a static data table into a powerful, user-driven tool for strategic planning. -> Library/Method: Vanilla JavaScript, Tailwind CSS.
-        - Report Info: Core Game Mechanics -> Goal: Inform, Explain Relationships -> Viz/Presentation Method: Custom diagrams and a new "Damage Principles" text section. -> Interaction: Hover effects to highlight information, visual state changes. -> Justification: Makes abstract game mechanics tangible and easier to understand than dense paragraphs. -> Library/Method: HTML, Tailwind CSS.
-        - Report Info: Team Building Principles -> Goal: Apply, Experiment -> Viz/Presentation Method: New interactive Team Builder tool. -> Interaction: Users select 5 Vassals; the UI provides real-time feedback on Faction bonuses, Blood Moon activation, and role balance. -> Justification: Allows players to actively apply the guide's principles and experiment with their own compositions in a hands-on way. -> Library/Method: Vanilla JavaScript.
-        - Report Info: Content-Specific Needs -> Goal: Provide Examples -> Viz/Presentation Method: NEW expanded section with a tabbed UI to display 5+ team cards for different game modes (Campaign, Abyss, Raids). -> Interaction: Users click tabs to switch between content-specific team recommendations. -> Justification: Gives players concrete, optimized starting points for the game's most important PVE challenges without overwhelming them with a single long list. -> Library/Method: HTML, Tailwind CSS, Vanilla JS.
+        - Report Info: Gacha System Mechanics -> Goal: Explain, Simulate, Strategize -> Viz/Presentation Method: A new "Summoning Circle" section with distinct components. -> Interaction: 1) Banner explanation text blocks. 2) Interactive Gacha Simulator with buttons for single/multi-pulls, a results display, and pity counters that update in real-time. -> Justification: This feature demystifies the gacha system, allows for risk-free experimentation, and provides actionable strategic advice on resource management, which is a critical aspect of the gacha genre. -> Library/Method: Vanilla JavaScript, HTML, Tailwind CSS.
+        - Report Info: Team Building Principles -> Goal: Apply, Experiment -> Viz/Presentation Method: Interactive Team Builder tool. -> Interaction: Users select 5 Vassals; the UI provides real-time feedback on Faction bonuses, Blood Moon activation, and role balance. -> Justification: Allows players to actively apply the guide's principles and experiment with their own compositions in a hands-on way. -> Library/Method: Vanilla JavaScript.
+        - Report Info: Content-Specific Needs -> Goal: Provide Examples -> Viz/Presentation Method: Expanded section with a tabbed UI to display 5+ team cards for different game modes (Campaign, Abyss, Raids). -> Interaction: Users click tabs to switch between content-specific team recommendations. -> Justification: Gives players concrete, optimized starting points for the game's most important PVE challenges without overwhelming them with a single long list. -> Library/Method: HTML, Tailwind CSS, Vanilla JS.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
@@ -30,17 +30,21 @@
         .nav-link {
             transition: color 0.3s, border-color 0.3s;
         }
-        .nav-link:hover {
+        .nav-link:hover, .nav-link.active {
             color: #DC2626; /* red-600 */
             border-color: #DC2626;
         }
-        .filter-button, .close-button, .builder-button, .tab-button {
+        .filter-button, .close-button, .builder-button, .tab-button, .summon-button {
              background-color: #57534E; /* stone-600 */
              color: #F5F5F4;
              transition: background-color 0.3s;
         }
-        .filter-button:hover, .close-button:hover, .builder-button:hover, .tab-button:hover, .tab-button.active {
+        .filter-button:hover, .close-button:hover, .builder-button:hover, .tab-button:hover, .summon-button:hover, .tab-button.active {
             background-color: #991B1B; /* red-800 */
+        }
+        .summon-button:disabled {
+            background-color: #44403C;
+            cursor: not-allowed;
         }
         .tier-sss { background-color: #7f1d1d; border-left-color: #fca5a5; color: white; }
         .tier-s { background-color: #7c2d12; border-left-color: #fdba74; color: white; }
@@ -71,6 +75,24 @@
         }
         .tab-panel { display: none; }
         .tab-panel.active { display: grid; }
+
+        .summon-result-card {
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+            transform: scale(0.5);
+            opacity: 0;
+            animation: reveal 0.5s forwards;
+        }
+
+        .summon-result-card.rarity-r { border: 2px solid #6b7280; }
+        .summon-result-card.rarity-sr { border: 2px solid #3b82f6; box-shadow: 0 0 10px #3b82f6; }
+        .summon-result-card.rarity-ssr { border: 2px solid #f59e0b; box-shadow: 0 0 15px #f59e0b; }
+
+        @keyframes reveal {
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -82,9 +104,9 @@
             <div class="hidden md:flex items-center space-x-6">
                 <a href="#overview" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Overview</a>
                 <a href="#tier-list" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Tier List</a>
-                <a href="#mechanics" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Mechanics</a>
                 <a href="#team-compositions" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Compositions</a>
                 <a href="#team-builder" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Team Builder</a>
+                <a href="#summoning" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Summoning</a>
             </div>
             <button id="mobile-menu-button" class="md:hidden text-stone-100">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
@@ -93,9 +115,9 @@
         <div id="mobile-menu" class="hidden md:hidden bg-stone-900">
              <a href="#overview" class="block text-stone-300 text-center py-2">Overview</a>
              <a href="#tier-list" class="block text-stone-300 text-center py-2">Tier List</a>
-             <a href="#mechanics" class="block text-stone-300 text-center py-2">Mechanics</a>
              <a href="#team-compositions" class="block text-stone-300 text-center py-2">Compositions</a>
              <a href="#team-builder" class="block text-stone-300 text-center py-2">Team Builder</a>
+             <a href="#summoning" class="block text-stone-300 text-center py-2">Summoning</a>
         </div>
     </header>
 
@@ -156,40 +178,6 @@
                 </div>
             </section>
 
-            <section id="mechanics" class="my-16 scroll-mt-24">
-                <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-header">The Pillars of Power</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-                    <div class="bg-card p-6 rounded-lg shadow-lg">
-                        <h3 class="text-2xl font-bold mb-4 text-center">Core Synergies</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <h4 class="font-bold text-lg text-header">Factions</h4>
-                                <p class="text-muted">Deploying multiple Vassals from the same Faction unlocks powerful passive stat boosts. Aim for a 3-2 split or a full 5-unit team.</p>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-lg text-header">Classes</h4>
-                                <p class="text-muted">A balanced warband is essential. A standard team needs a Defender, Enchanter, and DPS to handle all content.</p>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-lg text-header">The Blood Moon</h4>
-                                <p class="text-muted">The secret weapon. Including one of each Moon Phase (Waxing, Half, Full) in your team triggers the Blood Moon, reducing ultimate costs and boosting damage.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-card p-6 rounded-lg shadow-lg">
-                        <h3 class="text-2xl font-bold mb-4 text-center">Damage Principles</h3>
-                        <p class="text-muted mb-4">Damage is not a simple number. It's a combination of factors you can influence through strategic team building. Maximizing these is key to victory.</p>
-                         <ul class="list-disc list-inside space-y-2 text-stone-300">
-                            <li><strong class="text-white">Base Stats & Skills:</strong> A Vassal's core damage (Physical/Magical) multiplied by their skill effects.</li>
-                            <li><strong class="text-white">Faction Bonuses:</strong> Flat percentage increases to stats from team synergy.</li>
-                            <li><strong class="text-white">The Blood Moon Buff:</strong> A powerful team-wide damage multiplier. The most important buff to activate.</li>
-                             <li><strong class="text-white">Enchanter Buffs:</strong> Temporary, high-impact boosts to Attack, Crit Rate, and Crit Damage from support units like Acappella.</li>
-                            <li><strong class="text-white">Positional Bonuses:</strong> Character-specific passives, like Van Helsing's, that reward specific battlefield placement.</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-            
             <section id="team-compositions" class="my-16 scroll-mt-24">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-2 text-header">Optimized Team Compositions</h2>
                 <p class="text-center text-muted mb-8 max-w-2xl mx-auto">Theory is nothing without practice. Here are optimized team formations for the game's key PVE challenges, demonstrating the principles of synergy in action.</p>
@@ -200,20 +188,9 @@
                     <button class="tab-button px-4 py-2 rounded-md" data-tab="raids">Raids</button>
                 </div>
                 
-                <!-- Campaign Teams -->
-                <div id="panel-campaign" class="tab-panel active grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Cards will be populated here by JS -->
-                </div>
-                
-                <!-- Abyss Teams -->
-                <div id="panel-abyss" class="tab-panel grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Cards will be populated here by JS -->
-                </div>
-
-                <!-- Raid Teams -->
-                <div id="panel-raids" class="tab-panel grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                   <!-- Cards will be populated here by JS -->
-                </div>
+                <div id="panel-campaign" class="tab-panel active grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                <div id="panel-abyss" class="tab-panel grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                <div id="panel-raids" class="tab-panel grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
             </section>
             
             <section id="team-builder" class="my-16 scroll-mt-24">
@@ -223,23 +200,78 @@
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div class="lg:col-span-1 bg-card p-6 rounded-lg shadow-lg">
                         <h3 class="text-xl font-bold mb-4">Your Team</h3>
-                        <div id="team-builder-slots" class="grid grid-cols-5 gap-2 mb-4">
-                            <!-- JS will populate empty slots -->
-                        </div>
+                        <div id="team-builder-slots" class="grid grid-cols-5 gap-2 mb-4"></div>
                         <h3 class="text-xl font-bold mb-4 mt-6">Synergy Analysis</h3>
-                        <div id="team-analysis-report" class="space-y-3 text-stone-300">
+                        <div id="team-analysis-report" class="space-y-3 text-stone-300 text-sm">
                            <p>Select Vassals to begin analysis.</p>
                         </div>
                         <button id="reset-team-button" class="builder-button w-full mt-6 py-2 rounded">Reset Team</button>
                     </div>
                     <div class="lg:col-span-2 bg-card p-6 rounded-lg shadow-lg">
                         <h3 class="text-xl font-bold mb-4">Vassal Roster</h3>
-                        <div id="team-builder-roster" class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-2 max-h-[500px] overflow-y-auto pr-2">
-                           <!-- JS will populate roster -->
-                        </div>
+                        <div id="team-builder-roster" class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-2 max-h-[500px] overflow-y-auto pr-2"></div>
                     </div>
                 </div>
             </section>
+            
+            <section id="summoning" class="my-24 scroll-mt-24">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-2 text-header">The Summoning Circle</h2>
+                <p class="text-center text-muted mb-8 max-w-2xl mx-auto">Understand the gacha system, learn how to spend your precious resources efficiently, and test your luck with our summoning simulator.</p>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                     <div class="bg-card p-6 rounded-lg shadow-lg">
+                        <h3 class="text-2xl font-bold mb-4 text-center">Banner Strategy</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-bold text-lg text-header">Crimson Curse (Rate-Up Banner)</h4>
+                                <p class="text-muted text-sm">This is the premium, limited-time banner where you should spend your primary summoning currency, **Tears of the Moon**. It features a specific SSS-Tier Vassal with a 50% chance of being the SSR you pull. Always save your Tears for a Vassal that will significantly improve your team.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg text-header">Blue Dawn (Standard Banner)</h4>
+                                <p class="text-muted text-sm">Blue Dawn is your typical standard banner in gacha games that uses **Soothing Scrolls** as its pull currency. You don’t want to spend Tears on this banner; at endgame you only pull on it using free Soothing Scrolls, maybe once or twice a week, to complete weekly missions or dailies, or if you’re a new player in desperate need of dupes or new characters to fill out your roster.</p>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="bg-card p-6 rounded-lg shadow-lg">
+                        <h3 class="text-2xl font-bold mb-4 text-center">Pity System & Events</h3>
+                         <div class="space-y-4">
+                            <div>
+                                <h4 class="font-bold text-lg text-header">Pity System Explained</h4>
+                                <p class="text-muted text-sm">Your luck is protected by a pity system. You are guaranteed to receive at least one **SR Vassal every 10 summons**, and one **SSR Vassal every 80 summons**. This pity count is separate for each banner type and resets to zero after you pull an SSR.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg text-header">Current Event: Van Helsing Rate-Up</h4>
+                                <p id="event-timer" class="text-muted text-sm">The "Crimson Curse" banner currently features **Van Helsing**. A top-tier positional damage dealer, he's a high-value target for any account aiming to dominate single-target content like raids. Banner ends: <span class="font-bold text-white">July 11, 2025</span>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gacha Simulator -->
+                <div class="bg-card p-6 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4 text-center">Gacha Simulator</h3>
+                    <div class="flex justify-center gap-4 mb-6">
+                        <button id="sim-banner-standard" class="tab-button px-4 py-2 rounded-md">Blue Dawn (Standard)</button>
+                        <button id="sim-banner-rateup" class="tab-button active px-4 py-2 rounded-md">Crimson Curse (Rate-Up)</button>
+                    </div>
+                    <div class="bg-surface p-4 rounded-lg text-center mb-6">
+                        <p class="text-lg mb-2">Pity Counters</p>
+                        <div class="flex justify-center gap-8 text-sm">
+                            <p>SR Pity: <strong id="sr-pity-counter" class="text-blue-400">0</strong>/10</p>
+                            <p>SSR Pity: <strong id="ssr-pity-counter" class="text-yellow-400">0</strong>/80</p>
+                            <p>Tears Spent: <strong id="tears-spent-counter" class="text-red-400">0</strong></p>
+                        </div>
+                    </div>
+                    <div id="summon-results-display" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mb-6 min-h-[150px]">
+                        <!-- Summon results appear here -->
+                    </div>
+                    <div class="flex justify-center gap-4">
+                        <button id="summon-1-btn" class="summon-button px-6 py-3 rounded-lg font-bold">Summon x1</button>
+                        <button id="summon-10-btn" class="summon-button px-6 py-3 rounded-lg font-bold">Summon x10</button>
+                    </div>
+                </div>
+            </section>
+
         </div>
     </main>
     
@@ -279,7 +311,12 @@ const vassalData = [
     { id:19, tier: 'S', name: 'Spectral Gilrain', rarity: 'SSR', faction: 'Bloodborn', class: 'Assassin', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/spectral-gilrain.webp' },
     { id:20, tier: 'A', name: 'Augustine', rarity: 'SSR', faction: 'Bloodborn', class: 'Warrior', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/augustine.webp' },
     { id:21, tier: 'A', name: 'Cecia', rarity: 'SSR', faction: 'Kingdom', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/cecia.webp' },
-    { id:22, tier: 'S', name: 'Limine', rarity: 'SSR', faction: 'Ancestors', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/limine.webp' }
+    { id:22, tier: 'S', name: 'Limine', rarity: 'SSR', faction: 'Ancestors', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/limine.webp' },
+    // Adding R-tier vassals for gacha pool
+    { id: 101, tier: 'F', name: 'Guard', rarity: 'R', faction: 'Kingdom', class: 'Warrior', moon: 'Half Moon', image: 'https://placehold.co/150x150/6b7280/1f2937?text=Guard' },
+    { id: 102, tier: 'F', name: 'Acolyte', rarity: 'R', faction: 'Church', class: 'Enchanter', moon: 'Waxing Moon', image: 'https://placehold.co/150x150/6b7280/1f2937?text=Acolyte' },
+    { id: 103, tier: 'F', name: 'Scout', rarity: 'R', faction: 'Bloodborn', class: 'Hunter', moon: 'Full Moon', image: 'https://placehold.co/150x150/6b7280/1f2937?text=Scout' },
+    { id: 104, tier: 'F', name: 'Initiate', rarity: 'R', faction: 'Ancestors', class: 'Sorcerer', moon: 'Half Moon', image: 'https://placehold.co/150x150/6b7280/1f2937?text=Initiate' }
 ];
 
 const vassalDetails = {
@@ -320,8 +357,8 @@ const teamComps = {
     ]
 };
 
-
 document.addEventListener('DOMContentLoaded', () => {
+    // --- STATE & CONFIG ---
     const elements = {
         tierListBody: document.getElementById('tier-list-body'), nameSearch: document.getElementById('name-search'),
         tierFilter: document.getElementById('tier-filter'), factionFilter: document.getElementById('faction-filter'),
@@ -331,8 +368,11 @@ document.addEventListener('DOMContentLoaded', () => {
         mobileMenu: document.getElementById('mobile-menu'), teamBuilderSlots: document.getElementById('team-builder-slots'),
         teamAnalysisReport: document.getElementById('team-analysis-report'), teamBuilderRoster: document.getElementById('team-builder-roster'),
         resetTeamButton: document.getElementById('reset-team-button'),
-        tabs: document.querySelectorAll('.tab-button'),
-        panels: document.querySelectorAll('.tab-panel')
+        tabs: document.querySelectorAll('.tab-button'), panels: document.querySelectorAll('.tab-panel'),
+        simBannerStandard: document.getElementById('sim-banner-standard'), simBannerRateup: document.getElementById('sim-banner-rateup'),
+        srPityCounter: document.getElementById('sr-pity-counter'), ssrPityCounter: document.getElementById('ssr-pity-counter'),
+        tearsSpentCounter: document.getElementById('tears-spent-counter'), summonResultsDisplay: document.getElementById('summon-results-display'),
+        summon1Btn: document.getElementById('summon-1-btn'), summon10Btn: document.getElementById('summon-10-btn')
     };
 
     const state = {
@@ -340,11 +380,52 @@ document.addEventListener('DOMContentLoaded', () => {
         factionOrder: ['Ancestors', 'Church', 'Bloodborn', 'Kingdom'],
         classOrder: ['Guardian', 'Warrior', 'Assassin', 'Hunter', 'Sorcerer', 'Enchanter'],
         moonOrder: ['Waxing Moon', 'Half Moon', 'Full Moon'],
-        team: []
+        team: [],
+        gacha: {
+            isRateUp: true, srPity: 0, ssrPity: 0, tearsSpent: 0,
+            pools: {
+                ssr: vassalData.filter(v => v.rarity.includes('SSR')),
+                sr: vassalData.filter(v => v.rarity === 'SR'),
+                r: vassalData.filter(v => v.rarity === 'R')
+            },
+            rates: { ssr: 0.025, sr: 0.15 },
+            rateUpVassal: vassalData.find(v => v.name === 'Van Helsing')
+        }
     };
     
     let distributionChart;
 
+    // --- INITIALIZATION ---
+    function initialize() {
+        populateFilters();
+        filterAndRender();
+        initTeamBuilder();
+        initTeamComps();
+        initGachaSimulator();
+        updateActiveNav();
+        window.addEventListener('scroll', updateActiveNav);
+    }
+    
+    function updateActiveNav() {
+        let currentSection = '';
+        const sections = document.querySelectorAll('main section');
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (window.scrollY >= sectionTop - 100) {
+                currentSection = section.getAttribute('id');
+            }
+        });
+
+        const navLinks = document.querySelectorAll('header .nav-link');
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${currentSection}`) {
+                link.classList.add('active');
+            }
+        });
+    }
+
+    // --- TIER LIST & MODAL ---
     function populateFilters() {
         state.tierOrder.forEach(tier => { elements.tierFilter.innerHTML += `<option value="${tier}">${tier}</option>`; });
         state.factionOrder.forEach(faction => { elements.factionFilter.innerHTML += `<option value="${faction}">${faction}</option>`; });
@@ -365,14 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
         filteredData.forEach(vassal => {
             const row = document.createElement('tr');
             row.className = `border-b border-stone-700 hover:bg-stone-700/50 cursor-pointer tier-${vassal.tier.toLowerCase()} border-l-4 align-middle`;
-            row.innerHTML = `
-                <td class="p-3"><div class="flex items-center">
-                    <img src="${vassal.image}" alt="${vassal.name}" class="w-12 h-12 rounded-md mr-4 object-cover shadow-sm" onerror="this.onerror=null;this.src='https://lootandwaifus.com/characters/silverandblood/default.webp';">
-                    <div><div class="font-bold">${vassal.name}</div><div class="text-sm text-muted">${vassal.rarity}</div></div>
-                </div></td>
-                <td class="p-3"><span class="font-bold text-sm">${vassal.tier}</span></td><td class="p-3">${vassal.faction}</td>
-                <td class="p-3">${vassal.class}</td><td class="p-3">${vassal.moon}</td>
-            `;
+            row.innerHTML = `<td class="p-3"><div class="flex items-center"><img src="${vassal.image}" alt="${vassal.name}" class="w-12 h-12 rounded-md mr-4 object-cover shadow-sm" onerror="this.onerror=null;this.src='https://lootandwaifus.com/characters/silverandblood/default.webp';"><div><div class="font-bold">${vassal.name}</div><div class="text-sm text-muted">${vassal.rarity}</div></div></div></td><td class="p-3"><span class="font-bold text-sm">${vassal.tier}</span></td><td class="p-3">${vassal.faction}</td><td class="p-3">${vassal.class}</td><td class="p-3">${vassal.moon}</td>`;
             row.addEventListener('click', () => showModal(vassal));
             elements.tierListBody.appendChild(row);
         });
@@ -393,8 +467,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             synergyHTML += `</div>`;
         }
-        elements.modalContent.innerHTML = `
-            <div class="flex flex-col md:flex-row gap-6"><div class="md:w-1/3 flex-shrink-0"><img src="${vassal.image}" alt="${vassal.name}" class="w-full h-auto rounded-lg shadow-lg object-cover" onerror="this.onerror=null;this.src='https://lootandwaifus.com/characters/silverandblood/default.webp';"></div><div class="flex-grow"><h3 class="text-3xl font-bold mb-2 font-cinzel text-white">${vassal.name}</h3><div class="flex flex-wrap gap-x-4 gap-y-2 mb-4 text-muted"><span><strong>Tier:</strong> ${vassal.tier}</span><span><strong>Faction:</strong> ${vassal.faction}</span><span><strong>Class:</strong> ${vassal.class}</span><span><strong>Moon:</strong> ${vassal.moon}</span></div><h4 class="font-bold text-lg mt-4 mb-2 text-header">Strategic Analysis</h4><p class="text-stone-300">${detailText}</p>${synergyHTML}</div></div>`;
+        elements.modalContent.innerHTML = `<div class="flex flex-col md:flex-row gap-6"><div class="md:w-1/3 flex-shrink-0"><img src="${vassal.image}" alt="${vassal.name}" class="w-full h-auto rounded-lg shadow-lg object-cover" onerror="this.onerror=null;this.src='https://lootandwaifus.com/characters/silverandblood/default.webp';"></div><div class="flex-grow"><h3 class="text-3xl font-bold mb-2 font-cinzel text-white">${vassal.name}</h3><div class="flex flex-wrap gap-x-4 gap-y-2 mb-4 text-muted"><span><strong>Tier:</strong> ${vassal.tier}</span><span><strong>Faction:</strong> ${vassal.faction}</span><span><strong>Class:</strong> ${vassal.class}</span><span><strong>Moon:</strong> ${vassal.moon}</span></div><h4 class="font-bold text-lg mt-4 mb-2 text-header">Strategic Analysis</h4><p class="text-stone-300">${detailText}</p>${synergyHTML}</div></div>`;
     }
 
     function hideModal() { elements.modal.style.display = 'none'; }
@@ -418,11 +491,11 @@ document.addEventListener('DOMContentLoaded', () => {
         renderChart(filtered);
     }
     
+    // --- TEAM BUILDER ---
     function initTeamBuilder() {
         renderTeamSlots(); renderRoster();
         elements.resetTeamButton.addEventListener('click', () => { state.team = []; updateTeamBuilder(); });
     }
-
     function renderTeamSlots() {
         elements.teamBuilderSlots.innerHTML = '';
         for (let i = 0; i < 5; i++) {
@@ -437,7 +510,6 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.teamBuilderSlots.appendChild(slot);
         }
     }
-
     function renderRoster() {
         elements.teamBuilderRoster.innerHTML = '';
         vassalData.forEach(vassal => {
@@ -449,18 +521,14 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.teamBuilderRoster.appendChild(rosterItem);
         });
     }
-    
     function addVassalToTeam(id) {
         if (state.team.length < 5 && !state.team.some(v => v.id === id)) {
             const vassal = vassalData.find(v => v.id === id);
             state.team.push(vassal); updateTeamBuilder();
         }
     }
-
     function removeVassalFromTeam(id) { state.team = state.team.filter(v => v.id !== id); updateTeamBuilder(); }
-    
     function updateTeamBuilder() { renderTeamSlots(); renderRoster(); analyzeTeam(); }
-    
     function analyzeTeam() {
         if (state.team.length === 0) { elements.teamAnalysisReport.innerHTML = '<p class="text-muted">Select Vassals to begin analysis.</p>'; return; }
         let report = '';
@@ -471,22 +539,21 @@ document.addEventListener('DOMContentLoaded', () => {
         report += `</div>`;
         const moons = new Set(state.team.map(v => v.moon));
         report += `<div><strong class="text-header">Blood Moon:</strong> `;
-        if (moons.has('Waxing Moon') && moons.has('Half Moon') && moons.has('Full Moon')) { report += `<span class="text-green-400">ACTIVATED!</span> (Ultimate costs reduced)`; } else { report += `<span class="text-yellow-400">Not Active. Missing ${['Waxing Moon', 'Half Moon', 'Full Moon'].filter(m => !moons.has(m)).join(', ')}</span>`; }
+        if (moons.has('Waxing Moon') && moons.has('Half Moon') && moons.has('Full Moon')) { report += `<span class="text-green-400">ACTIVATED!</span>`; } else { report += `<span class="text-yellow-400">Not Active</span>`; }
         report += `</div>`;
         const roles = state.team.reduce((acc, v) => { acc[v.class] = (acc[v.class] || 0) + 1; return acc; }, {});
         report += `<div><strong class="text-header">Role Balance:</strong> ${Object.entries(roles).map(([role, count]) => `${role} x${count}`).join(', ')}</div>`;
         let summary = '';
         const tankCount = roles['Guardian'] || 0; const healerCount = roles['Enchanter'] || 0;
         const dpsCount = (roles['Warrior'] || 0) + (roles['Assassin'] || 0) + (roles['Hunter'] || 0) + (roles['Sorcerer'] || 0);
-        if (tankCount === 0) summary += '<li>Warning: No Guardian for protection.</li>';
-        if (healerCount === 0) summary += '<li>Warning: No Enchanter for healing.</li>';
-        if (dpsCount < 2) summary += '<li>Warning: Low damage output.</li>';
-        if (healerCount === 2) summary += '<li>Insight: Strong dual-support core for high survivability.</li>';
-        if (dpsCount >= 4) summary += '<li>Insight: Aggressive "glass cannon" composition.</li>';
-        if(summary !== '') report += `<div><strong class="text-header">Summary:</strong><ul class="list-disc list-inside">${summary}</ul></div>`;
+        if (tankCount === 0) summary += '<li>No Guardian for protection.</li>';
+        if (healerCount === 0) summary += '<li>No Enchanter for healing.</li>';
+        if (dpsCount < 2) summary += '<li>Low damage output.</li>';
+        if(summary !== '') report += `<div><strong class="text-header">Summary:</strong><ul class="list-disc list-inside text-yellow-400">${summary}</ul></div>`;
         elements.teamAnalysisReport.innerHTML = report;
     }
     
+    // --- TEAM COMPS ---
     function initTeamComps() {
         for (const [category, teams] of Object.entries(teamComps)) {
             const panel = document.getElementById(`panel-${category}`);
@@ -496,13 +563,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const vassal = vassalData.find(v => v.name === memberName);
                     return vassal ? `<div class="flex items-center text-sm"><img src="${vassal.image}" alt="${vassal.name}" class="w-6 h-6 rounded-full mr-2 object-cover" onerror="this.onerror=null;this.src='https://lootandwaifus.com/characters/silverandblood/default.webp';"><span>${vassal.name}</span></div>` : '';
                 }).join('');
-                return `
-                <div class="bg-surface p-6 rounded-lg shadow-lg">
-                    <h3 class="text-lg font-bold mb-1">${team.title}</h3>
-                    <p class="text-sm text-header mb-3">${team.focus}</p>
-                    <p class="text-muted text-sm mb-4">${team.desc}</p>
-                    <div class="space-y-2">${membersHTML}</div>
-                </div>`;
+                return `<div class="bg-surface p-6 rounded-lg shadow-lg"><h3 class="text-lg font-bold mb-1">${team.title}</h3><p class="text-sm text-header mb-3">${team.focus}</p><p class="text-muted text-sm mb-4">${team.desc}</p><div class="space-y-2">${membersHTML}</div></div>`;
             }).join('');
         }
     }
@@ -510,20 +571,116 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleTabClick(e) {
         elements.tabs.forEach(tab => tab.classList.remove('active'));
         elements.panels.forEach(panel => panel.classList.remove('active'));
-        
         const tabButton = e.currentTarget;
         tabButton.classList.add('active');
-        const targetPanelId = `panel-${tabButton.dataset.tab}`;
-        document.getElementById(targetPanelId).classList.add('active');
+        document.getElementById(`panel-${tabButton.dataset.tab}`).classList.add('active');
+    }
+    
+    // --- GACHA SIMULATOR ---
+    function initGachaSimulator() {
+        elements.simBannerStandard.addEventListener('click', () => switchGachaBanner(false));
+        elements.simBannerRateup.addEventListener('click', () => switchGachaBanner(true));
+        elements.summon1Btn.addEventListener('click', () => performSummon(1));
+        elements.summon10Btn.addEventListener('click', () => performSummon(10));
+        updateGachaUI();
     }
 
-    // Initial Setup
-    populateFilters();
-    filterAndRender();
-    initTeamBuilder();
-    initTeamComps();
+    function switchGachaBanner(isRateUp) {
+        state.gacha.isRateUp = isRateUp;
+        elements.simBannerStandard.classList.toggle('active', !isRateUp);
+        elements.simBannerRateup.classList.toggle('active', isRateUp);
+        state.gacha.srPity = 0; state.gacha.ssrPity = 0; state.gacha.tearsSpent = 0;
+        updateGachaUI();
+        elements.summonResultsDisplay.innerHTML = '';
+    }
     
-    // Event Listeners
+    function performSummon(count) {
+        let results = [];
+        let hasGuaranteedSR = false;
+
+        for(let i=0; i < count; i++) {
+            state.gacha.srPity++;
+            state.gacha.ssrPity++;
+            state.gacha.tearsSpent++;
+
+            let pull;
+            const rand = Math.random();
+
+            if (state.gacha.ssrPity === 80) {
+                if (state.gacha.isRateUp && Math.random() < 0.5) {
+                    pull = state.gacha.rateUpVassal;
+                } else {
+                    pull = getRandomVassal('ssr');
+                }
+                state.gacha.ssrPity = 0;
+            } else if (state.gacha.srPity === 10) {
+                 pull = getRandomVassal('sr');
+                 hasGuaranteedSR = true;
+            } else if (rand < state.gacha.rates.ssr) {
+                 if (state.gacha.isRateUp && Math.random() < 0.5) {
+                    pull = state.gacha.rateUpVassal;
+                } else {
+                    pull = getRandomVassal('ssr');
+                }
+                state.gacha.ssrPity = 0;
+            } else if (rand < state.gacha.rates.ssr + state.gacha.rates.sr) {
+                pull = getRandomVassal('sr');
+            } else {
+                pull = getRandomVassal('r');
+            }
+            results.push(pull);
+            if(pull.rarity.includes('SR')) state.gacha.srPity = 0;
+        }
+
+        if (count === 10 && !results.some(v => v.rarity.includes('SR')) && !hasGuaranteedSR) {
+             results[results.length -1] = getRandomVassal('sr');
+             const lastPullWasSSR = results[results.length-1].rarity.includes('SSR');
+             if(lastPullWasSSR) {
+                 state.gacha.ssrPity = 0;
+             }
+             state.gacha.srPity = 0;
+        }
+
+        displaySummonResults(results);
+        updateGachaUI();
+    }
+
+    function getRandomVassal(rarity) {
+        const pool = state.gacha.pools[rarity.toLowerCase()];
+        return pool[Math.floor(Math.random() * pool.length)];
+    }
+
+    function displaySummonResults(results) {
+        elements.summonResultsDisplay.innerHTML = '';
+        results.sort((a,b) => {
+            const rarityOrder = {'SSR':0, 'SSR+': 0, 'SR':1, 'R':2};
+            const aRarity = a.rarity.includes('SSR') ? 'SSR' : a.rarity;
+            const bRarity = b.rarity.includes('SSR') ? 'SSR' : b.rarity;
+            return rarityOrder[aRarity] - rarityOrder[bRarity];
+        });
+
+        results.forEach((vassal, index) => {
+            const card = document.createElement('div');
+            const rarityClass = vassal.rarity.includes('SSR') ? 'ssr' : vassal.rarity.toLowerCase();
+            card.className = `summon-result-card bg-surface rounded-lg p-2 text-center flex flex-col items-center justify-center rarity-${rarityClass}`;
+            card.style.animationDelay = `${index * 0.05}s`;
+            card.innerHTML = `
+                <img src="${vassal.image}" class="h-16 w-16 object-cover rounded-md mb-2" onerror="this.onerror=null;this.src='https://lootandwaifus.com/characters/silverandblood/default.webp';">
+                <p class="text-xs font-bold">${vassal.name}</p>
+                <p class="text-xs text-muted">${vassal.rarity}</p>
+            `;
+            elements.summonResultsDisplay.appendChild(card);
+        });
+    }
+
+    function updateGachaUI() {
+        elements.srPityCounter.textContent = state.gacha.srPity;
+        elements.ssrPityCounter.textContent = state.gacha.ssrPity;
+        elements.tearsSpentCounter.textContent = state.gacha.tearsSpent;
+    }
+
+    // --- EVENT LISTENERS & FINAL SETUP ---
+    initialize();
     [elements.nameSearch, elements.tierFilter, elements.factionFilter, elements.classFilter, elements.moonFilter].forEach(el => { el.addEventListener('input', filterAndRender); });
     elements.modalCloseButton.addEventListener('click', hideModal);
     elements.modal.addEventListener('click', (e) => { if (e.target === elements.modal) hideModal(); });
