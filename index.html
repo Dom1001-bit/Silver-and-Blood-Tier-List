@@ -10,12 +10,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Gothic Harmony -->
-    <!-- Application Structure Plan: A top-navigated, single-page application with distinct sections for different user goals. The structure starts with a high-level strategic summary, then allows users to dive into the core feature: an interactive, filterable Vassal Tier List. From there, users can explore related content like a deep dive into Game Mechanics (explained visually), practical Team Building examples, detailed profiles of Top-Tier Vassals, and a new interactive Team Builder tool. This non-linear, task-oriented structure was chosen because players have different needs: a new player might start with Mechanics, while a veteran might jump straight to the Team Builder to theorycraft. The flow encourages exploration and makes finding specific information fast and intuitive. -->
+    <!-- Application Structure Plan: A top-navigated, single-page application with distinct sections for different user goals. The structure starts with a high-level strategic summary, then allows users to dive into the core feature: an interactive, filterable Vassal Tier List. From there, users can explore related content like a deep dive into Game Mechanics (explained visually), practical Team Building examples (now expanded with a tabbed interface for different content types), detailed profiles of Top-Tier Vassals, and a new interactive Team Builder tool. This non-linear, task-oriented structure was chosen because players have different needs: a new player might start with Mechanics, while a veteran might jump straight to the Team Builder to theorycraft. The flow encourages exploration and makes finding specific information fast and intuitive. -->
     <!-- Visualization & Content Choices: 
         - Report Info: Comprehensive Vassal Tier List -> Goal: Organize, Compare, Explore -> Viz/Presentation Method: Interactive HTML table with filters, search, and character portraits. -> Interaction: Dropdown filters for Tier, Faction, Class; text search; clickable rows to show detailed modal with larger image and new Synergy section. -> Justification: Transforms a static data table into a powerful, user-driven tool for strategic planning. -> Library/Method: Vanilla JavaScript, Tailwind CSS.
         - Report Info: Core Game Mechanics -> Goal: Inform, Explain Relationships -> Viz/Presentation Method: Custom diagrams and a new "Damage Principles" text section. -> Interaction: Hover effects to highlight information, visual state changes. -> Justification: Makes abstract game mechanics tangible and easier to understand than dense paragraphs. -> Library/Method: HTML, Tailwind CSS.
         - Report Info: Team Building Principles -> Goal: Apply, Experiment -> Viz/Presentation Method: New interactive Team Builder tool. -> Interaction: Users select 5 Vassals; the UI provides real-time feedback on Faction bonuses, Blood Moon activation, and role balance. -> Justification: Allows players to actively apply the guide's principles and experiment with their own compositions in a hands-on way. -> Library/Method: Vanilla JavaScript.
-        - Report Info: Content-Specific Needs -> Goal: Provide Examples -> Viz/Presentation Method: New section with team cards for different game modes (Campaign, Abyss, Raids). -> Interaction: Clean, readable layout. -> Justification: Gives players concrete, optimized starting points for the game's most important PVE challenges. -> Library/Method: HTML, Tailwind CSS.
+        - Report Info: Content-Specific Needs -> Goal: Provide Examples -> Viz/Presentation Method: NEW expanded section with a tabbed UI to display 5+ team cards for different game modes (Campaign, Abyss, Raids). -> Interaction: Users click tabs to switch between content-specific team recommendations. -> Justification: Gives players concrete, optimized starting points for the game's most important PVE challenges without overwhelming them with a single long list. -> Library/Method: HTML, Tailwind CSS, Vanilla JS.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
@@ -34,12 +34,12 @@
             color: #DC2626; /* red-600 */
             border-color: #DC2626;
         }
-        .filter-button, .close-button, .builder-button {
+        .filter-button, .close-button, .builder-button, .tab-button {
              background-color: #57534E; /* stone-600 */
              color: #F5F5F4;
              transition: background-color 0.3s;
         }
-        .filter-button:hover, .close-button:hover, .builder-button:hover {
+        .filter-button:hover, .close-button:hover, .builder-button:hover, .tab-button:hover, .tab-button.active {
             background-color: #991B1B; /* red-800 */
         }
         .tier-sss { background-color: #7f1d1d; border-left-color: #fca5a5; color: white; }
@@ -69,6 +69,8 @@
             transform: scale(0.9);
             opacity: 0.5;
         }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: grid; }
     </style>
 </head>
 <body class="antialiased">
@@ -191,43 +193,26 @@
             <section id="team-compositions" class="my-16 scroll-mt-24">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-2 text-header">Optimized Team Compositions</h2>
                 <p class="text-center text-muted mb-8 max-w-2xl mx-auto">Theory is nothing without practice. Here are optimized team formations for the game's key PVE challenges, demonstrating the principles of synergy in action.</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="bg-card p-6 rounded-lg shadow-lg">
-                        <h3 class="text-xl font-bold mb-1">Threads of Fate (Campaign)</h3>
-                        <p class="text-sm text-header mb-3">Focus: Sustain & AoE</p>
-                        <p class="text-muted text-sm mb-4">A balanced team for clearing waves and handling diverse enemy types. Strong healing and AoE are key.</p>
-                        <div class="space-y-2">
-                            <div class="flex items-center text-sm"><img src="https://placehold.co/24x24/1e3a8a/f0f0f0?text=J" alt="" class="w-6 h-6 rounded-full mr-2"><span>Joan (Tank)</span></div>
-                            <div class="flex items-center text-sm"><img src="https://placehold.co/24x24/7f1d1d/f0f0f0?text=A" alt="" class="w-6 h-6 rounded-full mr-2"><span>Agares: Incendiary (AoE DPS)</span></div>
-                            <div class="flex items-center text-sm"><img src="https://placehold.co/24x24/7f1d1d/f0f0f0?text=S" alt="" class="w-6 h-6 rounded-full mr-2"><span>Selena (Ranged DPS)</span></div>
-                            <div class="flex items-center text-sm"><img src="https://placehold.co/24x24/7f1d1d/f0f0f0?text=A" alt="" class="w-6 h-6 rounded-full mr-2"><span>Acappella (Heal/Buff)</span></div>
-                            <div class="flex items-center text-sm"><img src="https://placehold.co/24x24/14532d/f0f0f0?text=S" alt="" class="w-6 h-6 rounded-full mr-2"><span>Seth (Heal/Buff)</span></div>
-                        </div>
-                    </div>
-                    <div class="bg-card p-6 rounded-lg shadow-lg">
-                        <h3 class="text-xl font-bold mb-1">Infinite Abyss (Tower)</h3>
-                        <p class="text-sm text-header mb-3">Focus: Burst Damage & Control</p>
-                        <p class="text-muted text-sm mb-4">Maximum damage output to beat timers, with summons for tactical blocking and control on tough floors.</p>
-                        <div class="space-y-2">
-                            <div class="flex items-center text-sm"><img src="https://placehold.co/24x24/7f1d1d/f0f0f0?text=A" alt="" class="w-6 h-6 rounded-full mr-2"><span>Ami: Transcendent (Tank)</span></div>
-                            <div class="flex items-center text-sm"><img src="https://placehold.co/24x24/7f1d1d/f0f0f0?text=N" alt="" class="w-6 h-6 rounded-full mr-2"><span>Noah: Transcendent (Summon DPS)</span></div>
-                            <div class="flex items-center text-sm"><img src="https://placehold.co/24x24/7c2d12/f0f0f0?text=G" alt="" class="w-6 h-6 rounded-full mr-2"><span>Spectral Gilrain (Assassin)</span></div>
-                             <div class="flex items-center text-sm"><img src="https://placehold.co/24x24/7f1d1d/f0f0f0?text=A" alt="" class="w-6 h-6 rounded-full mr-2"><span>Acappella (Heal/Buff)</span></div>
-                             <div class="flex items-center text-sm"><img src="https://placehold.co/24x24/7f1d1d/f0f0f0?text=L" alt="" class="w-6 h-6 rounded-full mr-2"><span>Lamia (Magical DPS)</span></div>
-                        </div>
-                    </div>
-                     <div class="bg-card p-6 rounded-lg shadow-lg">
-                        <h3 class="text-xl font-bold mb-1">Truth's Odyssey (Raids)</h3>
-                        <p class="text-sm text-header mb-3">Focus: Single-Target DPS & Survival</p>
-                        <p class="text-muted text-sm mb-4">Built to burn down a single, high-health boss. Positional damage and dual healers are crucial for survival.</p>
-                         <div class="space-y-2">
-                             <div class="flex items-center text-sm"><img src="https://placehold.co/24x24/7f1d1d/f0f0f0?text=A" alt="" class="w-6 h-6 rounded-full mr-2"><span>Ami: Transcendent (Tank)</span></div>
-                             <div class="flex items-center text-sm"><img src="https://placehold.co/24x24/7f1d1d/f0f0f0?text=V" alt="" class="w-6 h-6 rounded-full mr-2"><span>Van Helsing (Positional DPS)</span></div>
-                             <div class="flex items-center text-sm"><img src="https://placehold.co/24x24/7f1d1d/f0f0f0?text=L" alt="" class="w-6 h-6 rounded-full mr-2"><span>Lamia (Single-Target DPS)</span></div>
-                            <div class="flex items-center text-sm"><img src="https://placehold.co/24x24/7f1d1d/f0f0f0?text=A" alt="" class="w-6 h-6 rounded-full mr-2"><span>Acappella (Heal/Buff)</span></div>
-                             <div class="flex items-center text-sm"><img src="https://placehold.co/24x24/14532d/f0f0f0?text=S" alt="" class="w-6 h-6 rounded-full mr-2"><span>Seth (Heal/Buff)</span></div>
-                        </div>
-                    </div>
+                
+                <div class="mb-8 flex justify-center gap-2">
+                    <button class="tab-button active px-4 py-2 rounded-md" data-tab="campaign">Campaign</button>
+                    <button class="tab-button px-4 py-2 rounded-md" data-tab="abyss">Infinite Abyss</button>
+                    <button class="tab-button px-4 py-2 rounded-md" data-tab="raids">Raids</button>
+                </div>
+                
+                <!-- Campaign Teams -->
+                <div id="panel-campaign" class="tab-panel active grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Cards will be populated here by JS -->
+                </div>
+                
+                <!-- Abyss Teams -->
+                <div id="panel-abyss" class="tab-panel grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Cards will be populated here by JS -->
+                </div>
+
+                <!-- Raid Teams -->
+                <div id="panel-raids" class="tab-panel grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                   <!-- Cards will be populated here by JS -->
                 </div>
             </section>
             
@@ -292,7 +277,6 @@ const vassalData = [
     { id:17, tier: 'B', name: 'Empousa', rarity: 'SR', faction: 'Bloodborn', class: 'Sorcerer', moon: 'Full Moon', image: 'https://placehold.co/150x150/bfdbfe/1e3a8a?text=Empousa' },
     { id:18, tier: 'B', name: 'Joan', rarity: 'SR', faction: 'Church', class: 'Warrior', moon: 'Half Moon', image: 'https://placehold.co/150x150/bfdbfe/1e3a8a?text=Joan' },
     { id:19, tier: 'S', name: 'Spectral Gilrain', rarity: 'SSR', faction: 'Bloodborn', class: 'Assassin', moon: 'Half Moon', image: 'https://placehold.co/150x150/fed7aa/7c2d12?text=Gilrain' },
-    // Add a few more for builder variety
     { id:20, tier: 'A', name: 'Augustine', rarity: 'SSR', faction: 'Bloodborn', class: 'Warrior', moon: 'Half Moon', image: 'https://placehold.co/150x150/bbf7d0/14532d?text=Augustine' },
     { id:21, tier: 'A', name: 'Cecia', rarity: 'SSR', faction: 'Kingdom', class: 'Sorcerer', moon: 'Full Moon', image: 'https://placehold.co/150x150/bbf7d0/14532d?text=Cecia' },
     { id:22, tier: 'S', name: 'Limine', rarity: 'SSR', faction: 'Ancestors', class: 'Sorcerer', moon: 'Full Moon', image: 'https://placehold.co/150x150/fed7aa/7c2d12?text=Limine' }
@@ -307,22 +291,37 @@ const vassalDetails = {
 };
 
 const vassalSynergies = {
-    'Acappella': [
-        { name: 'Agares: Incendiary', reason: 'Provides the sustain needed for Agares to unleash his full AoE potential without fear.'},
-        { name: 'Ami: Transcendent', reason: 'Keeps the primary tank alive, forming an unbreakable defensive core.'}
+    'Acappella': [ { name: 'Agares: Incendiary', reason: 'Provides the sustain needed for Agares to unleash his full AoE potential without fear.'}, { name: 'Ami: Transcendent', reason: 'Keeps the primary tank alive, forming an unbreakable defensive core.'} ],
+    'Agares: Incendiary': [ { name: 'Acappella', reason: 'Her buffs and healing allow him to stay on the field longer, maximizing his damage output.' }, { name: 'Seth', reason: 'Dual-support from Seth ensures Agares can survive heavy focus fire while wiping enemy teams.' } ],
+    'Van Helsing': [ { name: 'Ami: Transcendent', reason: 'Ami can hold the line while Van Helsing takes a solo forward position for his damage bonus.'}, { name: 'Noah: Transcendent', reason: 'Noah\'s summons can be placed strategically to protect Van Helsing without interfering with his positional passive.'} ]
+};
+
+const teamComps = {
+    campaign: [
+        { title: 'Standard & Sustainable', focus: 'Sustain & AoE', desc: 'A balanced team for clearing waves and handling diverse enemy types. Strong healing and AoE are key.', members: ['Joan', 'Agares: Incendiary', 'Selena', 'Acappella', 'Seth'] },
+        { title: 'F2P Blood Moon Core', focus: 'Early Game Power', desc: 'Uses accessible Vassals to activate the crucial Blood Moon buff, giving new players a significant advantage.', members: ['Joan', 'Hati', 'Empousa', 'Aiona', 'Selena'] },
+        { title: 'Ancestors Might', focus: 'Faction Dominance', desc: 'A powerful 3-2 Ancestors/Church split that combines top-tier AoE, summons, and healing for overwhelming force.', members: ['Ami: Transcendent', 'Agares: Incendiary', 'Noah: Transcendent', 'Acappella', 'Seth'] },
+        { title: 'Church Resilience', focus: 'Extreme Survival', desc: 'This team focuses on outlasting any enemy with a strong Church core, featuring a tough tank and multiple healers/buffers.', members: ['Joan', 'Darcias', 'Van Helsing', 'Selena', 'Acappella'] },
+        { title: 'Kingdom\'s Gambit', focus: 'Mixed Damage & Control', desc: 'Leverages the strong DPS and support options from the Kingdom faction, creating a versatile and hard-hitting lineup.', members: ['Ami', 'Gilrain', 'Hati', 'Lamia', 'Cecia'] }
     ],
-    'Agares: Incendiary': [
-        { name: 'Acappella', reason: 'Her buffs and healing allow him to stay on the field longer, maximizing his damage output.' },
-        { name: 'Seth', reason: 'Dual-support from Seth ensures Agares can survive heavy focus fire while wiping enemy teams.' }
+    abyss: [
+        { title: 'Burst & Control', focus: 'Burst Damage & Summons', desc: 'Maximum damage output to beat timers, with summons for tactical blocking and control on tough floors.', members: ['Ami: Transcendent', 'Noah: Transcendent', 'Spectral Gilrain', 'Acappella', 'Lamia'] },
+        { title: 'Full Ancestors Assault', focus: 'Pure Faction Power', desc: 'Commits to a 5-man Ancestors team for the maximum faction bonus, resulting in incredible stats and damage.', members: ['Ami: Transcendent', 'Hati: Transcendent', 'Agares: Incendiary', 'Noah: Transcendent', 'Seth'] },
+        { title: 'Mage Annihilation', focus: 'AoE Magical Burst', desc: 'Stacks the game\'s best Sorcerers to obliterate enemy waves with overwhelming magical power. Requires strong support.', members: ['Ami: Transcendent', 'Agares: Incendiary', 'Lamia', 'Limine', 'Acappella'] },
+        { title: 'Assassin\'s Strike', focus: 'Backline Elimination', desc: 'Uses multiple assassins to bypass the enemy frontline and quickly eliminate high-priority threats like healers or mages.', members: ['Ami: Transcendent', 'Gilrain', 'Spectral Gilrain', 'Hati', 'Acappella'] },
+        { title: 'Bloodborn Fury', focus: 'High-Risk Offense', desc: 'A team built around the aggressive Bloodborn faction, relying on their powerful offensive capabilities to win quickly.', members: ['Jestel', 'Augustine', 'Bella', 'Spectral Gilrain', 'Aiona'] }
     ],
-    'Van Helsing': [
-        { name: 'Ami: Transcendent', reason: 'Ami can hold the line while Van Helsing takes a solo forward position for his damage bonus.'},
-        { name: 'Noah: Transcendent', reason: 'Noah\'s summons can be placed strategically to protect Van Helsing without interfering with his positional passive.'}
+    raids: [
+        { title: 'Positional Supremacy', focus: 'Single-Target & Survival', desc: 'Built to burn down a single, high-health boss. Positional damage and dual healers are crucial for survival.', members: ['Ami: Transcendent', 'Van Helsing', 'Lamia', 'Acappella', 'Seth'] },
+        { title: 'The Unbreakable Wall', focus: 'Maximum Sustain', desc: 'A hyper-defensive setup with a top-tier tank and dual healers, designed to survive the most devastating boss attacks.', members: ['Ami: Transcendent', 'Agares: Incendiary', 'Noah: Transcendent', 'Acappella', 'Seth'] },
+        { title: 'Ultimate Firestorm', focus: 'Blood Moon Spam', desc: 'This team perfectly aligns the Blood Moon and leverages Vassals with high damage ultimates to create a constant barrage of power.', members: ['Ami: Transcendent', 'Van Helsing', 'Lamia', 'Acappella', 'Noah: Transcendent'] },
+        { title: 'Church\'s Holy Fire', focus: 'Factional DPS', desc: 'A 3-2 Church/Ancestors team focusing on the raw single-target damage of Van Helsing, amplified by strong Church support.', members: ['Ami: Transcendent', 'Van Helsing', 'Darcias', 'Acappella', 'Seth'] },
+        { title: 'Assassin’s Gambit', focus: 'High Crit Damage', desc: 'Focuses on the high single-target burst of assassins, ideal for bosses without minions. Needs strong healing to survive.', members: ['Ami: Transcendent', 'Gilrain', 'Spectral Gilrain', 'Acappella', 'Seth'] }
     ]
 };
 
+
 document.addEventListener('DOMContentLoaded', () => {
-    // A lot of new elements to get
     const elements = {
         tierListBody: document.getElementById('tier-list-body'), nameSearch: document.getElementById('name-search'),
         tierFilter: document.getElementById('tier-filter'), factionFilter: document.getElementById('faction-filter'),
@@ -331,7 +330,9 @@ document.addEventListener('DOMContentLoaded', () => {
         modalCloseButton: document.getElementById('modal-close-button'), mobileMenuButton: document.getElementById('mobile-menu-button'),
         mobileMenu: document.getElementById('mobile-menu'), teamBuilderSlots: document.getElementById('team-builder-slots'),
         teamAnalysisReport: document.getElementById('team-analysis-report'), teamBuilderRoster: document.getElementById('team-builder-roster'),
-        resetTeamButton: document.getElementById('reset-team-button')
+        resetTeamButton: document.getElementById('reset-team-button'),
+        tabs: document.querySelectorAll('.tab-button'),
+        panels: document.querySelectorAll('.tab-panel')
     };
 
     const state = {
@@ -357,12 +358,10 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.tierListBody.innerHTML = `<tr><td colspan="5" class="text-center p-8 text-muted">No Vassals match filters.</td></tr>`;
             return;
         }
-
         filteredData.sort((a, b) => {
             const tierDiff = state.tierOrder.indexOf(a.tier) - state.tierOrder.indexOf(b.tier);
             return tierDiff !== 0 ? tierDiff : a.name.localeCompare(b.name);
         });
-
         filteredData.forEach(vassal => {
             const row = document.createElement('tr');
             row.className = `border-b border-stone-700 hover:bg-stone-700/50 cursor-pointer tier-${vassal.tier.toLowerCase()} border-l-4 align-middle`;
@@ -385,37 +384,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const synergies = vassalSynergies[vassal.name];
         let synergyHTML = '';
         if (synergies) {
-            synergyHTML = `<h4 class="font-bold text-lg mt-4 mb-2 text-header">Key Synergies</h4>
-                           <div class="space-y-2">`;
+            synergyHTML = `<h4 class="font-bold text-lg mt-4 mb-2 text-header">Key Synergies</h4><div class="space-y-2">`;
             synergies.forEach(syn => {
                 const partner = vassalData.find(v => v.name === syn.name);
-                synergyHTML += `<div class="flex items-center bg-surface p-2 rounded-md">
-                                    <img src="${partner.image}" alt="${partner.name}" class="w-8 h-8 rounded-full mr-3">
-                                    <div>
-                                        <p class="font-bold text-sm">${partner.name}</p>
-                                        <p class="text-xs text-muted">${syn.reason}</p>
-                                    </div>
-                                </div>`;
+                if(partner){
+                    synergyHTML += `<div class="flex items-center bg-surface p-2 rounded-md"><img src="${partner.image}" alt="${partner.name}" class="w-8 h-8 rounded-full mr-3"><div><p class="font-bold text-sm">${partner.name}</p><p class="text-xs text-muted">${syn.reason}</p></div></div>`;
+                }
             });
             synergyHTML += `</div>`;
         }
-
         elements.modalContent.innerHTML = `
-            <div class="flex flex-col md:flex-row gap-6">
-                <div class="md:w-1/3 flex-shrink-0">
-                    <img src="${vassal.image}" alt="${vassal.name}" class="w-full h-auto rounded-lg shadow-lg object-cover" onerror="this.onerror=null;this.src='https://placehold.co/150x150/2d2d2d/f0f0f0?text=N/A';">
-                </div>
-                <div class="flex-grow">
-                    <h3 class="text-3xl font-bold mb-2 font-cinzel text-white">${vassal.name}</h3>
-                    <div class="flex flex-wrap gap-x-4 gap-y-2 mb-4 text-muted">
-                        <span><strong>Tier:</strong> ${vassal.tier}</span><span><strong>Faction:</strong> ${vassal.faction}</span>
-                        <span><strong>Class:</strong> ${vassal.class}</span><span><strong>Moon:</strong> ${vassal.moon}</span>
-                    </div>
-                    <h4 class="font-bold text-lg mt-4 mb-2 text-header">Strategic Analysis</h4>
-                    <p class="text-stone-300">${detailText}</p>
-                    ${synergyHTML}
-                </div>
-            </div>`;
+            <div class="flex flex-col md:flex-row gap-6"><div class="md:w-1/3 flex-shrink-0"><img src="${vassal.image}" alt="${vassal.name}" class="w-full h-auto rounded-lg shadow-lg object-cover" onerror="this.onerror=null;this.src='https://placehold.co/150x150/2d2d2d/f0f0f0?text=N/A';"></div><div class="flex-grow"><h3 class="text-3xl font-bold mb-2 font-cinzel text-white">${vassal.name}</h3><div class="flex flex-wrap gap-x-4 gap-y-2 mb-4 text-muted"><span><strong>Tier:</strong> ${vassal.tier}</span><span><strong>Faction:</strong> ${vassal.faction}</span><span><strong>Class:</strong> ${vassal.class}</span><span><strong>Moon:</strong> ${vassal.moon}</span></div><h4 class="font-bold text-lg mt-4 mb-2 text-header">Strategic Analysis</h4><p class="text-stone-300">${detailText}</p>${synergyHTML}</div></div>`;
     }
 
     function hideModal() { elements.modal.style.display = 'none'; }
@@ -427,44 +406,21 @@ document.addEventListener('DOMContentLoaded', () => {
             acc[key] = (acc[key] || 0) + 1;
             return acc;
         }, {});
-
         if (distributionChart) { distributionChart.destroy(); }
-
         Chart.defaults.color = '#d6d3d1';
-        distributionChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: { labels: Object.keys(distribution), datasets: [{
-                    label: 'Vassal Distribution', data: Object.values(distribution),
-                    backgroundColor: [ '#7f1d1d', '#7c2d12', '#14532d', '#1e3a8a', '#374151', '#4b5563'],
-                    borderColor: '#292524', borderWidth: 4,
-                }]},
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
-        });
+        distributionChart = new Chart(ctx, { type: 'doughnut', data: { labels: Object.keys(distribution), datasets: [{ label: 'Vassal Distribution', data: Object.values(distribution), backgroundColor: [ '#7f1d1d', '#7c2d12', '#14532d', '#1e3a8a', '#374151', '#4b5563'], borderColor: '#292524', borderWidth: 4, }]}, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } } });
     }
 
     function filterAndRender() {
-        const queries = {
-            name: elements.nameSearch.value.toLowerCase(), tier: elements.tierFilter.value,
-            faction: elements.factionFilter.value, class: elements.classFilter.value, moon: elements.moonFilter.value,
-        };
-        const filtered = vassalData.filter(v => 
-            (queries.name === '' || v.name.toLowerCase().includes(queries.name)) &&
-            (queries.tier === 'all' || v.tier === queries.tier) &&
-            (queries.faction === 'all' || v.faction === queries.faction) &&
-            (queries.class === 'all' || v.class === queries.class) &&
-            (queries.moon === 'all' || v.moon === queries.moon)
-        );
+        const queries = { name: elements.nameSearch.value.toLowerCase(), tier: elements.tierFilter.value, faction: elements.factionFilter.value, class: elements.classFilter.value, moon: elements.moonFilter.value };
+        const filtered = vassalData.filter(v => (queries.name === '' || v.name.toLowerCase().includes(queries.name)) && (queries.tier === 'all' || v.tier === queries.tier) && (queries.faction === 'all' || v.faction === queries.faction) && (queries.class === 'all' || v.class === queries.class) && (queries.moon === 'all' || v.moon === queries.moon) );
         renderTable(filtered);
         renderChart(filtered);
     }
     
     function initTeamBuilder() {
-        renderTeamSlots();
-        renderRoster();
-        elements.resetTeamButton.addEventListener('click', () => {
-            state.team = [];
-            updateTeamBuilder();
-        });
+        renderTeamSlots(); renderRoster();
+        elements.resetTeamButton.addEventListener('click', () => { state.team = []; updateTeamBuilder(); });
     }
 
     function renderTeamSlots() {
@@ -488,9 +444,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const rosterItem = document.createElement('div');
             rosterItem.className = 'team-builder-vassal cursor-pointer transition-transform duration-200 hover:scale-110';
             rosterItem.innerHTML = `<img src="${vassal.image}" alt="${vassal.name}" class="w-full h-full object-cover rounded-md">`;
-            if (state.team.some(v => v.id === vassal.id)) {
-                rosterItem.classList.add('selected');
-            }
+            if (state.team.some(v => v.id === vassal.id)) { rosterItem.classList.add('selected'); }
             rosterItem.addEventListener('click', () => addVassalToTeam(vassal.id));
             elements.teamBuilderRoster.appendChild(rosterItem);
         });
@@ -499,78 +453,82 @@ document.addEventListener('DOMContentLoaded', () => {
     function addVassalToTeam(id) {
         if (state.team.length < 5 && !state.team.some(v => v.id === id)) {
             const vassal = vassalData.find(v => v.id === id);
-            state.team.push(vassal);
-            updateTeamBuilder();
+            state.team.push(vassal); updateTeamBuilder();
         }
     }
 
-    function removeVassalFromTeam(id) {
-        state.team = state.team.filter(v => v.id !== id);
-        updateTeamBuilder();
-    }
+    function removeVassalFromTeam(id) { state.team = state.team.filter(v => v.id !== id); updateTeamBuilder(); }
     
-    function updateTeamBuilder() {
-        renderTeamSlots();
-        renderRoster();
-        analyzeTeam();
-    }
+    function updateTeamBuilder() { renderTeamSlots(); renderRoster(); analyzeTeam(); }
     
     function analyzeTeam() {
-        if (state.team.length === 0) {
-            elements.teamAnalysisReport.innerHTML = '<p class="text-muted">Select Vassals to begin analysis.</p>';
-            return;
-        }
+        if (state.team.length === 0) { elements.teamAnalysisReport.innerHTML = '<p class="text-muted">Select Vassals to begin analysis.</p>'; return; }
         let report = '';
-        
         const factions = state.team.reduce((acc, v) => { acc[v.faction] = (acc[v.faction] || 0) + 1; return acc; }, {});
         report += `<div><strong class="text-header">Faction Synergy:</strong> `;
         const factionBonuses = Object.entries(factions).filter(([_, count]) => count >= 2);
-        if(factionBonuses.length > 0) {
-             report += factionBonuses.map(([faction, count]) => `${faction} x${count}`).join(', ');
-        } else {
-            report += `<span class="text-yellow-400">None Active</span>`;
-        }
+        if(factionBonuses.length > 0) { report += factionBonuses.map(([faction, count]) => `${faction} x${count}`).join(', '); } else { report += `<span class="text-yellow-400">None Active</span>`; }
         report += `</div>`;
-
         const moons = new Set(state.team.map(v => v.moon));
         report += `<div><strong class="text-header">Blood Moon:</strong> `;
-        if (moons.has('Waxing Moon') && moons.has('Half Moon') && moons.has('Full Moon')) {
-            report += `<span class="text-green-400">ACTIVATED!</span> (Ultimate costs reduced)`;
-        } else {
-            report += `<span class="text-yellow-400">Not Active. Missing ${['Waxing Moon', 'Half Moon', 'Full Moon'].filter(m => !moons.has(m)).join(', ')}</span>`;
-        }
+        if (moons.has('Waxing Moon') && moons.has('Half Moon') && moons.has('Full Moon')) { report += `<span class="text-green-400">ACTIVATED!</span> (Ultimate costs reduced)`; } else { report += `<span class="text-yellow-400">Not Active. Missing ${['Waxing Moon', 'Half Moon', 'Full Moon'].filter(m => !moons.has(m)).join(', ')}</span>`; }
         report += `</div>`;
-        
         const roles = state.team.reduce((acc, v) => { acc[v.class] = (acc[v.class] || 0) + 1; return acc; }, {});
-        const roleText = Object.entries(roles).map(([role, count]) => `${role} x${count}`).join(', ');
-        report += `<div><strong class="text-header">Role Balance:</strong> ${roleText}</div>`;
-        
+        report += `<div><strong class="text-header">Role Balance:</strong> ${Object.entries(roles).map(([role, count]) => `${role} x${count}`).join(', ')}</div>`;
         let summary = '';
-        const tankCount = roles['Guardian'] || 0;
-        const healerCount = roles['Enchanter'] || 0;
+        const tankCount = roles['Guardian'] || 0; const healerCount = roles['Enchanter'] || 0;
         const dpsCount = (roles['Warrior'] || 0) + (roles['Assassin'] || 0) + (roles['Hunter'] || 0) + (roles['Sorcerer'] || 0);
-
         if (tankCount === 0) summary += '<li>Warning: No Guardian for protection.</li>';
         if (healerCount === 0) summary += '<li>Warning: No Enchanter for healing.</li>';
         if (dpsCount < 2) summary += '<li>Warning: Low damage output.</li>';
         if (healerCount === 2) summary += '<li>Insight: Strong dual-support core for high survivability.</li>';
         if (dpsCount >= 4) summary += '<li>Insight: Aggressive "glass cannon" composition.</li>';
         if(summary !== '') report += `<div><strong class="text-header">Summary:</strong><ul class="list-disc list-inside">${summary}</ul></div>`;
-
         elements.teamAnalysisReport.innerHTML = report;
     }
+    
+    function initTeamComps() {
+        for (const [category, teams] of Object.entries(teamComps)) {
+            const panel = document.getElementById(`panel-${category}`);
+            if (!panel) continue;
+            panel.innerHTML = teams.map(team => {
+                const membersHTML = team.members.map(memberName => {
+                    const vassal = vassalData.find(v => v.name === memberName);
+                    return vassal ? `<div class="flex items-center text-sm"><img src="${vassal.image}" alt="${vassal.name}" class="w-6 h-6 rounded-full mr-2 object-cover"><span>${vassal.name}</span></div>` : '';
+                }).join('');
+                return `
+                <div class="bg-surface p-6 rounded-lg shadow-lg">
+                    <h3 class="text-lg font-bold mb-1">${team.title}</h3>
+                    <p class="text-sm text-header mb-3">${team.focus}</p>
+                    <p class="text-muted text-sm mb-4">${team.desc}</p>
+                    <div class="space-y-2">${membersHTML}</div>
+                </div>`;
+            }).join('');
+        }
+    }
+    
+    function handleTabClick(e) {
+        elements.tabs.forEach(tab => tab.classList.remove('active'));
+        elements.panels.forEach(panel => panel.classList.remove('active'));
+        
+        const tabButton = e.currentTarget;
+        tabButton.classList.add('active');
+        const targetPanelId = `panel-${tabButton.dataset.tab}`;
+        document.getElementById(targetPanelId).classList.add('active');
+    }
 
+    // Initial Setup
     populateFilters();
     filterAndRender();
     initTeamBuilder();
-
-    [elements.nameSearch, elements.tierFilter, elements.factionFilter, elements.classFilter, elements.moonFilter].forEach(el => {
-        el.addEventListener('input', filterAndRender);
-    });
+    initTeamComps();
     
+    // Event Listeners
+    [elements.nameSearch, elements.tierFilter, elements.factionFilter, elements.classFilter, elements.moonFilter].forEach(el => { el.addEventListener('input', filterAndRender); });
     elements.modalCloseButton.addEventListener('click', hideModal);
     elements.modal.addEventListener('click', (e) => { if (e.target === elements.modal) hideModal(); });
     elements.mobileMenuButton.addEventListener('click', () => { elements.mobileMenu.classList.toggle('hidden'); });
+    elements.tabs.forEach(tab => tab.addEventListener('click', handleTabClick));
 });
 </script>
 </body>
