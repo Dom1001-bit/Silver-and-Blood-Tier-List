@@ -104,6 +104,7 @@
             <div class="hidden md:flex items-center space-x-6">
                 <a href="#overview" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Overview</a>
                 <a href="#tier-list" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Tier List</a>
+                <a href="#mechanics" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Mechanics</a>
                 <a href="#team-compositions" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Compositions</a>
                 <a href="#team-builder" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Team Builder</a>
                 <a href="#summoning" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Summoning</a>
@@ -138,7 +139,7 @@
 
             <section id="tier-list" class="my-16 scroll-mt-24">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-2 text-header">Interactive PVE Tier List</h2>
-                <p class="text-center text-muted mb-8 max-w-2xl mx-auto">Use the filters to find the perfect unit. Click any Vassal to see a detailed breakdown of their role, strategic value, and key synergies.</p>
+                <p class="text-center text-muted mb-8 max-w-2xl mx-auto">Use the filters to find the perfect unit. Click any Vassal to see a detailed breakdown of their role, strategic value, and key synergies. Tiers are based on overall PVE content clearing potential.</p>
                 <div class="bg-surface p-4 rounded-lg shadow-md mb-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 items-end">
                     <input type="text" id="name-search" placeholder="Search by name..." class="w-full p-2 rounded bg-stone-800 border border-stone-600 col-span-2 lg:col-span-2 text-white">
                     <div>
@@ -174,6 +175,39 @@
                     <div class="lg:col-span-1 bg-card p-4 rounded-lg shadow-lg flex flex-col justify-center">
                          <h3 class="text-xl font-bold text-center mb-4">Filtered Vassal Distribution</h3>
                          <div class="chart-container"><canvas id="distribution-chart"></canvas></div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="mechanics" class="my-16 scroll-mt-24">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-header">The Pillars of Power</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+                    <div class="bg-card p-6 rounded-lg shadow-lg">
+                        <h3 class="text-2xl font-bold mb-4 text-center">Core Synergies</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-bold text-lg text-header">Factions & Classes</h4>
+                                <p class="text-muted">Deploying multiple Vassals from the same Faction unlocks powerful passive stat boosts. A balanced team of different Classes (Tank, Healer, DPS) is essential for handling all content.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg text-header">The Blood Moon</h4>
+                                <p class="text-muted">The secret weapon. Including one of each Moon Phase (Waxing, Half, Full) in your team triggers the Blood Moon, reducing ultimate costs and boosting damage.</p>
+                            </div>
+                             <div>
+                                <h4 class="font-bold text-lg text-header">Sanity System</h4>
+                                <p class="text-muted">Certain Vassals have a Sanity bar. At max Sanity, they may transform or gain powerful new abilities. Managing Sanity generation and expenditure is a key tactical layer for these characters.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-card p-6 rounded-lg shadow-lg">
+                        <h3 class="text-2xl font-bold mb-4 text-center">Damage Principles</h3>
+                        <p class="text-muted mb-4">Damage is not a simple number. It's a combination of factors you can influence through strategic team building. Maximizing these is key to victory.</p>
+                         <ul class="list-disc list-inside space-y-2 text-stone-300">
+                            <li><strong class="text-white">Base Stats & Skills:</strong> A Vassal's core damage multiplied by their skill effects.</li>
+                             <li><strong class="text-white">True Damage:</strong> A powerful damage type that ignores enemy DEF and DEF Rate, making it invaluable against heavily armored bosses. Vassals like Silvan Vetia specialize in this.</li>
+                            <li><strong class="text-white">Enchanter Buffs:</strong> Temporary, high-impact boosts to Attack, Crit Rate, and Crit Damage from support units like Acappella.</li>
+                            <li><strong class="text-white">Positional & Dodge Mechanics:</strong> Some Vassals, like Van Helsing, gain damage from specific positions. Others, like Gilrain, leverage Dodge to not only survive but also trigger counter-attacks or special effects.</li>
+                        </ul>
                     </div>
                 </div>
             </section>
@@ -240,8 +274,8 @@
                                 <p class="text-muted text-sm">Your luck is protected by a pity system. You are guaranteed to receive at least one **SR Vassal every 10 summons**, and one **SSR Vassal every 80 summons**. This pity count is separate for each banner type and resets to zero after you pull an SSR.</p>
                             </div>
                             <div>
-                                <h4 class="font-bold text-lg text-header">Current Event: Van Helsing Rate-Up</h4>
-                                <p id="event-timer" class="text-muted text-sm">The "Crimson Curse" banner currently features **Van Helsing**. A top-tier positional damage dealer, he's a high-value target for any account aiming to dominate single-target content like raids. Banner ends: <span class="font-bold text-white">July 11, 2025</span>.</p>
+                                <h4 class="font-bold text-lg text-header">Current Event: Silvan Vetia Rate-Up</h4>
+                                <p id="event-timer" class="text-muted text-sm">The "Crimson Curse" banner currently features **Silvan Vetia**. A top-tier True Damage dealer, she is an S-Tier priority for any account needing to counter heavily armored raid bosses. Banner ends: <span class="font-bold text-white">July 25, 2025</span>.</p>
                             </div>
                         </div>
                     </div>
@@ -293,25 +327,28 @@ const vassalData = [
     { id:1, tier: 'SSS', name: 'Acappella', rarity: 'SSR', faction: 'Church', class: 'Enchanter', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/acappella.webp' },
     { id:2, tier: 'SSS', name: 'Agares: Incendiary', rarity: 'SSR+', faction: 'Ancestors', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/agares-incendiary.webp' },
     { id:3, tier: 'SSS', name: 'Ami: Transcendent', rarity: 'SSR+', faction: 'Ancestors', class: 'Guardian', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/ami-transcendent.webp' },
-    { id:4, tier: 'SSS', name: 'Lamia', rarity: 'SSR', faction: 'Kingdom', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/lamia.webp' },
+    { id:4, tier: 'S', name: 'Lamia', rarity: 'SSR', faction: 'Kingdom', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/lamia.webp' },
     { id:5, tier: 'SSS', name: 'Noah: Transcendent', rarity: 'SSR+', faction: 'Ancestors', class: 'Hunter', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/noah-transcendent.webp' },
-    { id:6, tier: 'SSS', name: 'Seth', rarity: 'SSR', faction: 'Ancestors', class: 'Enchanter', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/seth.webp' },
+    { id:6, tier: 'S', name: 'Seth', rarity: 'SSR', faction: 'Ancestors', class: 'Enchanter', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/seth.webp' },
     { id:7, tier: 'SSS', name: 'Van Helsing', rarity: 'SSR', faction: 'Church', class: 'Hunter', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/van-helsing.webp' },
-    { id:8, tier: 'S', name: 'Ami', rarity: 'SSR', faction: 'Kingdom', class: 'Enchanter', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/ami.webp' },
-    { id:9, tier: 'S', name: 'Bella', rarity: 'SSR', faction: 'Bloodborn', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/bella.webp' },
-    { id:10, tier: 'S', name: 'Darcias', rarity: 'SSR', faction: 'Church', class: 'Warrior', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/darcias.webp' },
+    { id:8, tier: 'A', name: 'Ami', rarity: 'SSR', faction: 'Kingdom', class: 'Enchanter', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/ami.webp' },
+    { id:9, tier: 'B', name: 'Bella', rarity: 'SSR', faction: 'Bloodborn', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/bella.webp' },
+    { id:10, tier: 'A', name: 'Darcias', rarity: 'SSR', faction: 'Church', class: 'Warrior', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/darcias.webp' },
     { id:11, tier: 'S', name: 'Gilrain', rarity: 'SSR', faction: 'Kingdom', class: 'Assassin', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/gilrain.webp' },
     { id:12, tier: 'S', name: 'Hati: Transcendent', rarity: 'SSR+', faction: 'Ancestors', class: 'Warrior', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/hati-transcendent.webp' },
     { id:13, tier: 'A', name: 'Hati', rarity: 'SSR', faction: 'Kingdom', class: 'Assassin', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/hati.webp' },
-    { id:14, tier: 'A', name: 'Jestel', rarity: 'SR', faction: 'Bloodborn', class: 'Guardian', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/jestel.webp' },
-    { id:15, tier: 'A', name: 'Selena', rarity: 'SR', faction: 'Church', class: 'Hunter', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/selena.webp' },
+    { id:14, tier: 'B', name: 'Jestel', rarity: 'SR', faction: 'Bloodborn', class: 'Guardian', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/jestel.webp' },
+    { id:15, tier: 'B', name: 'Selena', rarity: 'SR', faction: 'Church', class: 'Hunter', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/selena.webp' },
     { id:16, tier: 'B', name: 'Aiona', rarity: 'SR', faction: 'Bloodborn', class: 'Enchanter', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/aiona.webp' },
-    { id:17, tier: 'B', name: 'Empousa', rarity: 'SR', faction: 'Bloodborn', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/empousa.webp' },
+    { id:17, tier: 'C', name: 'Empousa', rarity: 'SR', faction: 'Bloodborn', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/empousa.webp' },
     { id:18, tier: 'B', name: 'Joan', rarity: 'SR', faction: 'Church', class: 'Warrior', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/joan.webp' },
     { id:19, tier: 'S', name: 'Spectral Gilrain', rarity: 'SSR', faction: 'Bloodborn', class: 'Assassin', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/spectral-gilrain.webp' },
     { id:20, tier: 'A', name: 'Augustine', rarity: 'SSR', faction: 'Bloodborn', class: 'Warrior', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/augustine.webp' },
     { id:21, tier: 'A', name: 'Cecia', rarity: 'SSR', faction: 'Kingdom', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/cecia.webp' },
     { id:22, tier: 'S', name: 'Limine', rarity: 'SSR', faction: 'Ancestors', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/limine.webp' },
+    { id:23, tier: 'S', name: 'Silvan Vetia', rarity: 'SSR', faction: 'Bloodborn', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/silvan-vetia.webp' },
+    { id:24, tier: 'S', name: 'Friedrich', rarity: 'SSR', faction: 'Kingdom', class: 'Guardian', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/friedrich.webp' },
+    { id:25, tier: 'A', name: 'Theophane', rarity: 'SSR', faction: 'Church', class: 'Guardian', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/theophane.webp' },
     // Adding R-tier vassals for gacha pool
     { id: 101, tier: 'F', name: 'Guard', rarity: 'R', faction: 'Kingdom', class: 'Warrior', moon: 'Half Moon', image: 'https://placehold.co/150x150/6b7280/1f2937?text=Guard' },
     { id: 102, tier: 'F', name: 'Acolyte', rarity: 'R', faction: 'Church', class: 'Enchanter', moon: 'Waxing Moon', image: 'https://placehold.co/150x150/6b7280/1f2937?text=Acolyte' },
@@ -325,12 +362,14 @@ const vassalDetails = {
     'Noah: Transcendent': 'Premier physical DPS who can also summon allies. These summons provide immense tactical value as blockers, decoys, or extra damage sources, offering unparalleled board control.',
     'Agares: Incendiary': 'The game\'s top AoE magical DPS. Essential for clearing waves of enemies quickly and efficiently. His high survivability makes him less reliant on constant protection.',
     'Acappella': 'The cornerstone of any top-tier team. Provides powerful healing and a suite of offensive and defensive buffs that multiply the effectiveness of the entire team. Arguably the highest priority Vassal to acquire.',
+    'Silvan Vetia': 'A top-tier Sorcerer who specializes in dealing True Damage, which ignores enemy DEF stats. This makes her an elite boss-killer, particularly against heavily armored raid bosses where normal damage is heavily reduced. Her unique, though controversial, design also makes her a popular character.'
 };
 
 const vassalSynergies = {
     'Acappella': [ { name: 'Agares: Incendiary', reason: 'Provides the sustain needed for Agares to unleash his full AoE potential without fear.'}, { name: 'Ami: Transcendent', reason: 'Keeps the primary tank alive, forming an unbreakable defensive core.'} ],
     'Agares: Incendiary': [ { name: 'Acappella', reason: 'Her buffs and healing allow him to stay on the field longer, maximizing his damage output.' }, { name: 'Seth', reason: 'Dual-support from Seth ensures Agares can survive heavy focus fire while wiping enemy teams.' } ],
-    'Van Helsing': [ { name: 'Ami: Transcendent', reason: 'Ami can hold the line while Van Helsing takes a solo forward position for his damage bonus.'}, { name: 'Noah: Transcendent', reason: 'Noah\'s summons can be placed strategically to protect Van Helsing without interfering with his positional passive.'} ]
+    'Van Helsing': [ { name: 'Ami: Transcendent', reason: 'Ami can hold the line while Van Helsing takes a solo forward position for his damage bonus.'}, { name: 'Noah: Transcendent', reason: 'Noah\'s summons can be placed strategically to protect Van Helsing without interfering with his positional passive.'} ],
+    'Silvan Vetia': [ { name: 'Acappella', reason: 'Acappella\'s healing and defensive buffs are crucial for keeping the fragile Silvan alive to deal her massive True Damage.'}, { name: 'Friedrich', reason: 'A strong Guardian like Friedrich can lock down enemies, ensuring they can\'t reach Silvan in the backline.'} ]
 };
 
 const teamComps = {
@@ -338,19 +377,19 @@ const teamComps = {
         { title: 'Standard & Sustainable', focus: 'Sustain & AoE', desc: 'A balanced team for clearing waves and handling diverse enemy types. Strong healing and AoE are key.', members: ['Joan', 'Agares: Incendiary', 'Selena', 'Acappella', 'Seth'] },
         { title: 'F2P Blood Moon Core', focus: 'Early Game Power', desc: 'Uses accessible Vassals to activate the crucial Blood Moon buff, giving new players a significant advantage.', members: ['Joan', 'Hati', 'Empousa', 'Aiona', 'Selena'] },
         { title: 'Ancestors Might', focus: 'Faction Dominance', desc: 'A powerful 3-2 Ancestors/Church split that combines top-tier AoE, summons, and healing for overwhelming force.', members: ['Ami: Transcendent', 'Agares: Incendiary', 'Noah: Transcendent', 'Acappella', 'Seth'] },
-        { title: 'Church Resilience', focus: 'Extreme Survival', desc: 'This team focuses on outlasting any enemy with a strong Church core, featuring a tough tank and multiple healers/buffers.', members: ['Joan', 'Darcias', 'Van Helsing', 'Selena', 'Acappella'] },
+        { title: 'True Damage Core', focus: 'Anti-Armor Wave Clear', desc: 'Centered around Silvan Vetia\'s True Damage, this team excels at clearing stages with heavily armored knights or guardians.', members: ['Friedrich', 'Silvan Vetia', 'Lamia', 'Acappella', 'Ami'] },
         { title: 'Kingdom\'s Gambit', focus: 'Mixed Damage & Control', desc: 'Leverages the strong DPS and support options from the Kingdom faction, creating a versatile and hard-hitting lineup.', members: ['Ami', 'Gilrain', 'Hati', 'Lamia', 'Cecia'] }
     ],
     abyss: [
         { title: 'Burst & Control', focus: 'Burst Damage & Summons', desc: 'Maximum damage output to beat timers, with summons for tactical blocking and control on tough floors.', members: ['Ami: Transcendent', 'Noah: Transcendent', 'Spectral Gilrain', 'Acappella', 'Lamia'] },
         { title: 'Full Ancestors Assault', focus: 'Pure Faction Power', desc: 'Commits to a 5-man Ancestors team for the maximum faction bonus, resulting in incredible stats and damage.', members: ['Ami: Transcendent', 'Hati: Transcendent', 'Agares: Incendiary', 'Noah: Transcendent', 'Seth'] },
-        { title: 'Mage Annihilation', focus: 'AoE Magical Burst', desc: 'Stacks the game\'s best Sorcerers to obliterate enemy waves with overwhelming magical power. Requires strong support.', members: ['Ami: Transcendent', 'Agares: Incendiary', 'Lamia', 'Limine', 'Acappella'] },
-        { title: 'Assassin\'s Strike', focus: 'Backline Elimination', desc: 'Uses multiple assassins to bypass the enemy frontline and quickly eliminate high-priority threats like healers or mages.', members: ['Ami: Transcendent', 'Gilrain', 'Spectral Gilrain', 'Hati', 'Acappella'] },
+        { title: 'The Silvan Abyss', focus: 'True Damage Climb', desc: 'Utilizes Silvan Vetia to bypass the increasingly high DEF stats of enemies on upper Abyss floors. Requires heavy protection.', members: ['Ami: Transcendent', 'Silvan Vetia', 'Acappella', 'Seth', 'Friedrich'] },
+        { title: 'Dodge & Weave', focus: 'Evasion Tanking', desc: 'This composition uses high-Dodge assassins like Gilrain not as primary DPS, but as evasive pseudo-tanks to distract and survive.', members: ['Friedrich', 'Gilrain', 'Spectral Gilrain', 'Hati', 'Acappella'] },
         { title: 'Bloodborn Fury', focus: 'High-Risk Offense', desc: 'A team built around the aggressive Bloodborn faction, relying on their powerful offensive capabilities to win quickly.', members: ['Jestel', 'Augustine', 'Bella', 'Spectral Gilrain', 'Aiona'] }
     ],
     raids: [
         { title: 'Positional Supremacy', focus: 'Single-Target & Survival', desc: 'Built to burn down a single, high-health boss. Positional damage and dual healers are crucial for survival.', members: ['Ami: Transcendent', 'Van Helsing', 'Lamia', 'Acappella', 'Seth'] },
-        { title: 'The Unbreakable Wall', focus: 'Maximum Sustain', desc: 'A hyper-defensive setup with a top-tier tank and dual healers, designed to survive the most devastating boss attacks.', members: ['Ami: Transcendent', 'Agares: Incendiary', 'Noah: Transcendent', 'Acappella', 'Seth'] },
+        { title: 'The True Damage Meta', focus: 'Anti-Boss Armor', desc: 'The premier team for armored bosses. Silvan Vetia ignores DEF, while dual healers keep the team alive through massive boss AoEs.', members: ['Friedrich', 'Silvan Vetia', 'Van Helsing', 'Acappella', 'Seth'] },
         { title: 'Ultimate Firestorm', focus: 'Blood Moon Spam', desc: 'This team perfectly aligns the Blood Moon and leverages Vassals with high damage ultimates to create a constant barrage of power.', members: ['Ami: Transcendent', 'Van Helsing', 'Lamia', 'Acappella', 'Noah: Transcendent'] },
         { title: 'Church\'s Holy Fire', focus: 'Factional DPS', desc: 'A 3-2 Church/Ancestors team focusing on the raw single-target damage of Van Helsing, amplified by strong Church support.', members: ['Ami: Transcendent', 'Van Helsing', 'Darcias', 'Acappella', 'Seth'] },
         { title: 'Assassin’s Gambit', focus: 'High Crit Damage', desc: 'Focuses on the high single-target burst of assassins, ideal for bosses without minions. Needs strong healing to survive.', members: ['Ami: Transcendent', 'Gilrain', 'Spectral Gilrain', 'Acappella', 'Seth'] }
@@ -389,7 +428,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 r: vassalData.filter(v => v.rarity === 'R')
             },
             rates: { ssr: 0.025, sr: 0.15 },
-            rateUpVassal: vassalData.find(v => v.name === 'Van Helsing')
+            rateUpVassal: vassalData.find(v => v.name === 'Silvan Vetia')
         }
     };
     
@@ -606,14 +645,14 @@ document.addEventListener('DOMContentLoaded', () => {
             let pull;
             const rand = Math.random();
 
-            if (state.gacha.ssrPity === 80) {
+            if (state.gacha.ssrPity >= 80) {
                 if (state.gacha.isRateUp && Math.random() < 0.5) {
                     pull = state.gacha.rateUpVassal;
                 } else {
                     pull = getRandomVassal('ssr');
                 }
                 state.gacha.ssrPity = 0;
-            } else if (state.gacha.srPity === 10) {
+            } else if (state.gacha.srPity >= 10) {
                  pull = getRandomVassal('sr');
                  hasGuaranteedSR = true;
             } else if (rand < state.gacha.rates.ssr) {
