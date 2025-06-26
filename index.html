@@ -54,7 +54,7 @@
         .modal { display: none; animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         .hero-section {
-            background-image: linear-gradient(to top, rgba(28,25,23,1) 0%, rgba(28,25,23,0) 50%), url('https://placehold.co/1400x600/1c1917/9ca3af?text=Silver+%26+Blood');
+            background-image: linear-gradient(to top, rgba(28,25,23,1) 0%, rgba(28,25,23,0) 50%), url('https://images.unsplash.com/photo-1531252088820-27038b556185?q=80&w=2574&auto=format&fit=crop');
             background-size: cover; background-position: center;
         }
         .bg-card { background-color: #292524; } /* stone-800 */
@@ -258,28 +258,28 @@
 
 <script>
 const vassalData = [
-    { id:1, tier: 'SSS', name: 'Acappella', rarity: 'SSR', faction: 'Church', class: 'Enchanter', moon: 'Half Moon', image: 'https://placehold.co/150x150/fecaca/7f1d1d?text=Acappella' },
-    { id:2, tier: 'SSS', name: 'Agares: Incendiary', rarity: 'SSR+', faction: 'Ancestors', class: 'Sorcerer', moon: 'Full Moon', image: 'https://placehold.co/150x150/fecaca/7f1d1d?text=Agares' },
-    { id:3, tier: 'SSS', name: 'Ami: Transcendent', rarity: 'SSR+', faction: 'Ancestors', class: 'Guardian', moon: 'Waxing Moon', image: 'https://placehold.co/150x150/fecaca/7f1d1d?text=Ami' },
-    { id:4, tier: 'SSS', name: 'Lamia', rarity: 'SSR', faction: 'Kingdom', class: 'Sorcerer', moon: 'Full Moon', image: 'https://placehold.co/150x150/fecaca/7f1d1d?text=Lamia' },
-    { id:5, tier: 'SSS', name: 'Noah: Transcendent', rarity: 'SSR+', faction: 'Ancestors', class: 'Hunter', moon: 'Half Moon', image: 'https://placehold.co/150x150/fecaca/7f1d1d?text=Noah' },
-    { id:6, tier: 'SSS', name: 'Seth', rarity: 'SSR', faction: 'Ancestors', class: 'Enchanter', moon: 'Waxing Moon', image: 'https://placehold.co/150x150/fecaca/7f1d1d?text=Seth' },
-    { id:7, tier: 'SSS', name: 'Van Helsing', rarity: 'SSR', faction: 'Church', class: 'Hunter', moon: 'Full Moon', image: 'https://placehold.co/150x150/fecaca/7f1d1d?text=Van+Helsing' },
-    { id:8, tier: 'S', name: 'Ami', rarity: 'SSR', faction: 'Kingdom', class: 'Enchanter', moon: 'Half Moon', image: 'https://placehold.co/150x150/fed7aa/7c2d12?text=Ami' },
-    { id:9, tier: 'S', name: 'Bella', rarity: 'SSR', faction: 'Bloodborn', class: 'Sorcerer', moon: 'Full Moon', image: 'https://placehold.co/150x150/fed7aa/7c2d12?text=Bella' },
-    { id:10, tier: 'S', name: 'Darcias', rarity: 'SSR', faction: 'Church', class: 'Warrior', moon: 'Half Moon', image: 'https://placehold.co/150x150/fed7aa/7c2d12?text=Darcias' },
-    { id:11, tier: 'S', name: 'Gilrain', rarity: 'SSR', faction: 'Kingdom', class: 'Assassin', moon: 'Half Moon', image: 'https://placehold.co/150x150/fed7aa/7c2d12?text=Gilrain' },
-    { id:12, tier: 'S', name: 'Hati: Transcendent', rarity: 'SSR+', faction: 'Ancestors', class: 'Warrior', moon: 'Full Moon', image: 'https://placehold.co/150x150/fed7aa/7c2d12?text=Hati' },
-    { id:13, tier: 'A', name: 'Hati', rarity: 'SSR', faction: 'Kingdom', class: 'Assassin', moon: 'Half Moon', image: 'https://placehold.co/150x150/bbf7d0/14532d?text=Hati' },
-    { id:14, tier: 'A', name: 'Jestel', rarity: 'SR', faction: 'Bloodborn', class: 'Guardian', moon: 'Waxing Moon', image: 'https://placehold.co/150x150/bbf7d0/14532d?text=Jestel' },
-    { id:15, tier: 'A', name: 'Selena', rarity: 'SR', faction: 'Church', class: 'Hunter', moon: 'Full Moon', image: 'https://placehold.co/150x150/bbf7d0/14532d?text=Selena' },
-    { id:16, tier: 'B', name: 'Aiona', rarity: 'SR', faction: 'Bloodborn', class: 'Enchanter', moon: 'Waxing Moon', image: 'https://placehold.co/150x150/bfdbfe/1e3a8a?text=Aiona' },
-    { id:17, tier: 'B', name: 'Empousa', rarity: 'SR', faction: 'Bloodborn', class: 'Sorcerer', moon: 'Full Moon', image: 'https://placehold.co/150x150/bfdbfe/1e3a8a?text=Empousa' },
-    { id:18, tier: 'B', name: 'Joan', rarity: 'SR', faction: 'Church', class: 'Warrior', moon: 'Half Moon', image: 'https://placehold.co/150x150/bfdbfe/1e3a8a?text=Joan' },
-    { id:19, tier: 'S', name: 'Spectral Gilrain', rarity: 'SSR', faction: 'Bloodborn', class: 'Assassin', moon: 'Half Moon', image: 'https://placehold.co/150x150/fed7aa/7c2d12?text=Gilrain' },
-    { id:20, tier: 'A', name: 'Augustine', rarity: 'SSR', faction: 'Bloodborn', class: 'Warrior', moon: 'Half Moon', image: 'https://placehold.co/150x150/bbf7d0/14532d?text=Augustine' },
-    { id:21, tier: 'A', name: 'Cecia', rarity: 'SSR', faction: 'Kingdom', class: 'Sorcerer', moon: 'Full Moon', image: 'https://placehold.co/150x150/bbf7d0/14532d?text=Cecia' },
-    { id:22, tier: 'S', name: 'Limine', rarity: 'SSR', faction: 'Ancestors', class: 'Sorcerer', moon: 'Full Moon', image: 'https://placehold.co/150x150/fed7aa/7c2d12?text=Limine' }
+    { id:1, tier: 'SSS', name: 'Acappella', rarity: 'SSR', faction: 'Church', class: 'Enchanter', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/acappella.webp' },
+    { id:2, tier: 'SSS', name: 'Agares: Incendiary', rarity: 'SSR+', faction: 'Ancestors', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/agares-incendiary.webp' },
+    { id:3, tier: 'SSS', name: 'Ami: Transcendent', rarity: 'SSR+', faction: 'Ancestors', class: 'Guardian', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/ami-transcendent.webp' },
+    { id:4, tier: 'SSS', name: 'Lamia', rarity: 'SSR', faction: 'Kingdom', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/lamia.webp' },
+    { id:5, tier: 'SSS', name: 'Noah: Transcendent', rarity: 'SSR+', faction: 'Ancestors', class: 'Hunter', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/noah-transcendent.webp' },
+    { id:6, tier: 'SSS', name: 'Seth', rarity: 'SSR', faction: 'Ancestors', class: 'Enchanter', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/seth.webp' },
+    { id:7, tier: 'SSS', name: 'Van Helsing', rarity: 'SSR', faction: 'Church', class: 'Hunter', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/van-helsing.webp' },
+    { id:8, tier: 'S', name: 'Ami', rarity: 'SSR', faction: 'Kingdom', class: 'Enchanter', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/ami.webp' },
+    { id:9, tier: 'S', name: 'Bella', rarity: 'SSR', faction: 'Bloodborn', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/bella.webp' },
+    { id:10, tier: 'S', name: 'Darcias', rarity: 'SSR', faction: 'Church', class: 'Warrior', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/darcias.webp' },
+    { id:11, tier: 'S', name: 'Gilrain', rarity: 'SSR', faction: 'Kingdom', class: 'Assassin', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/gilrain.webp' },
+    { id:12, tier: 'S', name: 'Hati: Transcendent', rarity: 'SSR+', faction: 'Ancestors', class: 'Warrior', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/hati-transcendent.webp' },
+    { id:13, tier: 'A', name: 'Hati', rarity: 'SSR', faction: 'Kingdom', class: 'Assassin', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/hati.webp' },
+    { id:14, tier: 'A', name: 'Jestel', rarity: 'SR', faction: 'Bloodborn', class: 'Guardian', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/jestel.webp' },
+    { id:15, tier: 'A', name: 'Selena', rarity: 'SR', faction: 'Church', class: 'Hunter', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/selena.webp' },
+    { id:16, tier: 'B', name: 'Aiona', rarity: 'SR', faction: 'Bloodborn', class: 'Enchanter', moon: 'Waxing Moon', image: 'https://lootandwaifus.com/characters/silverandblood/aiona.webp' },
+    { id:17, tier: 'B', name: 'Empousa', rarity: 'SR', faction: 'Bloodborn', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/empousa.webp' },
+    { id:18, tier: 'B', name: 'Joan', rarity: 'SR', faction: 'Church', class: 'Warrior', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/joan.webp' },
+    { id:19, tier: 'S', name: 'Spectral Gilrain', rarity: 'SSR', faction: 'Bloodborn', class: 'Assassin', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/spectral-gilrain.webp' },
+    { id:20, tier: 'A', name: 'Augustine', rarity: 'SSR', faction: 'Bloodborn', class: 'Warrior', moon: 'Half Moon', image: 'https://lootandwaifus.com/characters/silverandblood/augustine.webp' },
+    { id:21, tier: 'A', name: 'Cecia', rarity: 'SSR', faction: 'Kingdom', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/cecia.webp' },
+    { id:22, tier: 'S', name: 'Limine', rarity: 'SSR', faction: 'Ancestors', class: 'Sorcerer', moon: 'Full Moon', image: 'https://lootandwaifus.com/characters/silverandblood/limine.webp' }
 ];
 
 const vassalDetails = {
@@ -367,7 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
             row.className = `border-b border-stone-700 hover:bg-stone-700/50 cursor-pointer tier-${vassal.tier.toLowerCase()} border-l-4 align-middle`;
             row.innerHTML = `
                 <td class="p-3"><div class="flex items-center">
-                    <img src="${vassal.image}" alt="${vassal.name}" class="w-12 h-12 rounded-md mr-4 object-cover shadow-sm" onerror="this.onerror=null;this.src='https://placehold.co/80x80/2d2d2d/f0f0f0?text=N/A';">
+                    <img src="${vassal.image}" alt="${vassal.name}" class="w-12 h-12 rounded-md mr-4 object-cover shadow-sm" onerror="this.onerror=null;this.src='https://lootandwaifus.com/characters/silverandblood/default.webp';">
                     <div><div class="font-bold">${vassal.name}</div><div class="text-sm text-muted">${vassal.rarity}</div></div>
                 </div></td>
                 <td class="p-3"><span class="font-bold text-sm">${vassal.tier}</span></td><td class="p-3">${vassal.faction}</td>
@@ -388,13 +388,13 @@ document.addEventListener('DOMContentLoaded', () => {
             synergies.forEach(syn => {
                 const partner = vassalData.find(v => v.name === syn.name);
                 if(partner){
-                    synergyHTML += `<div class="flex items-center bg-surface p-2 rounded-md"><img src="${partner.image}" alt="${partner.name}" class="w-8 h-8 rounded-full mr-3"><div><p class="font-bold text-sm">${partner.name}</p><p class="text-xs text-muted">${syn.reason}</p></div></div>`;
+                    synergyHTML += `<div class="flex items-center bg-surface p-2 rounded-md"><img src="${partner.image}" alt="${partner.name}" class="w-8 h-8 rounded-full mr-3" onerror="this.onerror=null;this.src='https://lootandwaifus.com/characters/silverandblood/default.webp';"><div><p class="font-bold text-sm">${partner.name}</p><p class="text-xs text-muted">${syn.reason}</p></div></div>`;
                 }
             });
             synergyHTML += `</div>`;
         }
         elements.modalContent.innerHTML = `
-            <div class="flex flex-col md:flex-row gap-6"><div class="md:w-1/3 flex-shrink-0"><img src="${vassal.image}" alt="${vassal.name}" class="w-full h-auto rounded-lg shadow-lg object-cover" onerror="this.onerror=null;this.src='https://placehold.co/150x150/2d2d2d/f0f0f0?text=N/A';"></div><div class="flex-grow"><h3 class="text-3xl font-bold mb-2 font-cinzel text-white">${vassal.name}</h3><div class="flex flex-wrap gap-x-4 gap-y-2 mb-4 text-muted"><span><strong>Tier:</strong> ${vassal.tier}</span><span><strong>Faction:</strong> ${vassal.faction}</span><span><strong>Class:</strong> ${vassal.class}</span><span><strong>Moon:</strong> ${vassal.moon}</span></div><h4 class="font-bold text-lg mt-4 mb-2 text-header">Strategic Analysis</h4><p class="text-stone-300">${detailText}</p>${synergyHTML}</div></div>`;
+            <div class="flex flex-col md:flex-row gap-6"><div class="md:w-1/3 flex-shrink-0"><img src="${vassal.image}" alt="${vassal.name}" class="w-full h-auto rounded-lg shadow-lg object-cover" onerror="this.onerror=null;this.src='https://lootandwaifus.com/characters/silverandblood/default.webp';"></div><div class="flex-grow"><h3 class="text-3xl font-bold mb-2 font-cinzel text-white">${vassal.name}</h3><div class="flex flex-wrap gap-x-4 gap-y-2 mb-4 text-muted"><span><strong>Tier:</strong> ${vassal.tier}</span><span><strong>Faction:</strong> ${vassal.faction}</span><span><strong>Class:</strong> ${vassal.class}</span><span><strong>Moon:</strong> ${vassal.moon}</span></div><h4 class="font-bold text-lg mt-4 mb-2 text-header">Strategic Analysis</h4><p class="text-stone-300">${detailText}</p>${synergyHTML}</div></div>`;
     }
 
     function hideModal() { elements.modal.style.display = 'none'; }
@@ -431,7 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if(state.team[i]){
                 const vassal = state.team[i];
                 slot.classList.remove('empty');
-                slot.innerHTML = `<img src="${vassal.image}" alt="${vassal.name}" class="w-full h-full object-cover rounded-lg" title="${vassal.name}">`;
+                slot.innerHTML = `<img src="${vassal.image}" alt="${vassal.name}" class="w-full h-full object-cover rounded-lg" title="${vassal.name}" onerror="this.onerror=null;this.src='https://lootandwaifus.com/characters/silverandblood/default.webp';">`;
                 slot.addEventListener('click', () => removeVassalFromTeam(vassal.id));
             }
             elements.teamBuilderSlots.appendChild(slot);
@@ -443,7 +443,7 @@ document.addEventListener('DOMContentLoaded', () => {
         vassalData.forEach(vassal => {
             const rosterItem = document.createElement('div');
             rosterItem.className = 'team-builder-vassal cursor-pointer transition-transform duration-200 hover:scale-110';
-            rosterItem.innerHTML = `<img src="${vassal.image}" alt="${vassal.name}" class="w-full h-full object-cover rounded-md">`;
+            rosterItem.innerHTML = `<img src="${vassal.image}" alt="${vassal.name}" class="w-full h-full object-cover rounded-md" onerror="this.onerror=null;this.src='https://lootandwaifus.com/characters/silverandblood/default.webp';">`;
             if (state.team.some(v => v.id === vassal.id)) { rosterItem.classList.add('selected'); }
             rosterItem.addEventListener('click', () => addVassalToTeam(vassal.id));
             elements.teamBuilderRoster.appendChild(rosterItem);
@@ -494,7 +494,7 @@ document.addEventListener('DOMContentLoaded', () => {
             panel.innerHTML = teams.map(team => {
                 const membersHTML = team.members.map(memberName => {
                     const vassal = vassalData.find(v => v.name === memberName);
-                    return vassal ? `<div class="flex items-center text-sm"><img src="${vassal.image}" alt="${vassal.name}" class="w-6 h-6 rounded-full mr-2 object-cover"><span>${vassal.name}</span></div>` : '';
+                    return vassal ? `<div class="flex items-center text-sm"><img src="${vassal.image}" alt="${vassal.name}" class="w-6 h-6 rounded-full mr-2 object-cover" onerror="this.onerror=null;this.src='https://lootandwaifus.com/characters/silverandblood/default.webp';"><span>${vassal.name}</span></div>` : '';
                 }).join('');
                 return `
                 <div class="bg-surface p-6 rounded-lg shadow-lg">
