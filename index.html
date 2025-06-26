@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Silver and Blood: Interactive PVE Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Gothic Harmony -->
+    <!-- Application Structure Plan: A top-navigated, single-page application with distinct sections for different user goals. The structure starts with a high-level strategic summary, then allows users to dive into the core feature: an interactive, filterable Vassal Tier List. From there, users can explore related content like a deep dive into Game Mechanics (explained visually), practical Team Building examples, and detailed profiles of Top-Tier Vassals. This non-linear, task-oriented structure was chosen because players have different needs: a new player might start with Mechanics, while a veteran might jump straight to the Tier List filters to find a specific role. The flow encourages exploration and makes finding specific information fast and intuitive, which is superior to a linear report format for a game guide. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Comprehensive Vassal Tier List -> Goal: Organize, Compare, Explore -> Viz/Presentation Method: Interactive HTML table with filters and search. -> Interaction: Dropdown filters for Tier, Faction, Class, Moon Phase; text search; clickable rows to show detailed modal. -> Justification: Transforms a static data table into a powerful, user-driven tool for strategic planning. -> Library/Method: Vanilla JavaScript, Tailwind CSS.
+        - Report Info: Faction, Class, Moon Phase Systems -> Goal: Inform, Explain Relationships -> Viz/Presentation Method: Custom diagrams built with HTML/CSS. -> Interaction: Hover effects to highlight information, visual state changes (e.g., activating the 'Blood Moon'). -> Justification: Makes abstract game mechanics tangible and easier to understand than dense paragraphs. -> Library/Method: HTML, Tailwind CSS.
+        - Report Info: Tier distribution of Vassals -> Goal: Analyze, Summarize Meta -> Viz/Presentation Method: Donut Chart -> Interaction: Chart dynamically updates based on the main tier list filters. -> Justification: Provides at-a-glance insights into the game's meta-balance (e.g., "Which faction dominates the SSS-Tier?"). -> Library/Method: Chart.js.
+        - Report Info: Top Vassal Profiles & Team Compositions -> Goal: Inform, Provide Examples -> Viz/Presentation Method: Styled "card" components. -> Interaction: Clean, readable layout. -> Justification: Presents key characters and team setups in a visually appealing, digestible format. -> Library/Method: HTML, Tailwind CSS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F5F5F4; /* stone-100 */
+            color: #1C1917; /* stone-900 */
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Cinzel', serif;
+        }
+        .nav-link {
+            transition: color 0.3s, border-color 0.3s;
+        }
+        .nav-link:hover {
+            color: #991B1B; /* red-800 */
+            border-color: #991B1B;
+        }
+        .filter-button, .close-button {
+             background-color: #44403C; /* stone-700 */
+             color: #F5F5F4;
+             transition: background-color 0.3s;
+        }
+        .filter-button:hover, .close-button:hover {
+            background-color: #991B1B; /* red-800 */
+        }
+        .tier-sss { background-color: #fca5a5; border-left-color: #dc2626; }
+        .tier-s { background-color: #fdba74; border-left-color: #f97316; }
+        .tier-a { background-color: #86efac; border-left-color: #22c55e; }
+        .tier-b { background-color: #93c5fd; border-left-color: #3b82f6; }
+        .tier-c { background-color: #d1d5db; border-left-color: #6b7280; }
+        .tier-f { background-color: #f3f4f6; border-left-color: #9ca3af; }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .modal {
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-stone-800/90 backdrop-blur-sm sticky top-0 z-40 w-full shadow-lg">
+        <nav class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-stone-100 font-cinzel">Silver & Blood Guide</a>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#overview" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Overview</a>
+                <a href="#tier-list" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Tier List</a>
+                <a href="#mechanics" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Mechanics</a>
+                <a href="#team-builder" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Team Building</a>
+                <a href="#top-vassals" class="nav-link text-stone-300 border-b-2 border-transparent pb-1">Top Vassals</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-stone-100">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-stone-800">
+            <a href="#overview" class="block text-stone-300 text-center py-2">Overview</a>
+            <a href="#tier-list" class="block text-stone-300 text-center py-2">Tier List</a>
+            <a href="#mechanics" class="block text-stone-300 text-center py-2">Mechanics</a>
+            <a href="#team-builder" class="block text-stone-300 text-center py-2">Team Building</a>
+            <a href="#top-vassals" class="block text-stone-300 text-center py-2">Top Vassals</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+
+        <!-- Section 1: Overview -->
+        <section id="overview" class="my-12 scroll-mt-24">
+            <h1 class="text-4xl md:text-5xl font-bold text-center mb-4 text-red-900">The Path to Power in Minexus</h1>
+            <p class="max-w-3xl mx-auto text-center text-lg text-stone-700">
+                Welcome, traveler. This guide illuminates the true nature of strategy in *Silver and Blood*. While the game boasts of "Complex Strategy," the path to victory isn't won in the heat of its automated battles. Instead, true power is forged before the first blow is struck. Success is a puzzle of pre-combat preparation, where mastering the intricate synergies between Vassals—their Factions, Classes, and the arcane Moon Phases—is the ultimate expression of skill. This interactive guide is designed to help you solve that puzzle.
+            </p>
+        </section>
+
+        <!-- Section 2: Interactive Tier List -->
+        <section id="tier-list" class="my-16 scroll-mt-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-2">Interactive PVE Tier List</h2>
+            <p class="text-center text-stone-600 mb-8 max-w-2xl mx-auto">This is your command center for evaluating Vassals. Use the filters to find the perfect unit for your team. Click on any Vassal to see a detailed breakdown of their role and strategic value. The data is based on PVE performance to help you clear all content.</p>
+
+            <!-- Filters -->
+            <div class="bg-stone-200 p-4 rounded-lg shadow-md mb-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 items-end">
+                <input type="text" id="name-search" placeholder="Search by name..." class="w-full p-2 rounded border border-stone-300 col-span-2 lg:col-span-2">
+                <div>
+                    <label for="tier-filter" class="block text-sm font-medium text-stone-700 mb-1">Tier</label>
+                    <select id="tier-filter" class="w-full p-2 rounded border border-stone-300">
+                        <option value="all">All Tiers</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="faction-filter" class="block text-sm font-medium text-stone-700 mb-1">Faction</label>
+                    <select id="faction-filter" class="w-full p-2 rounded border border-stone-300">
+                        <option value="all">All Factions</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="class-filter" class="block text-sm font-medium text-stone-700 mb-1">Class</label>
+                    <select id="class-filter" class="w-full p-2 rounded border border-stone-300">
+                        <option value="all">All Classes</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="moon-filter" class="block text-sm font-medium text-stone-700 mb-1">Moon Phase</label>
+                    <select id="moon-filter" class="w-full p-2 rounded border border-stone-300">
+                        <option value="all">All Phases</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Tier List & Chart -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 bg-white p-4 rounded-lg shadow-lg overflow-x-auto">
+                    <table class="w-full min-w-[600px]">
+                        <thead class="border-b-2 border-stone-300">
+                            <tr>
+                                <th class="p-3 text-left text-sm font-semibold text-stone-600">Vassal</th>
+                                <th class="p-3 text-left text-sm font-semibold text-stone-600">Tier</th>
+                                <th class="p-3 text-left text-sm font-semibold text-stone-600">Faction</th>
+                                <th class="p-3 text-left text-sm font-semibold text-stone-600">Class</th>
+                                <th class="p-3 text-left text-sm font-semibold text-stone-600">Moon Phase</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tier-list-body">
+                            <!-- JS will populate this -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="lg:col-span-1 bg-white p-4 rounded-lg shadow-lg flex flex-col justify-center">
+                     <h3 class="text-xl font-bold text-center mb-4">Filtered Vassal Distribution</h3>
+                     <div class="chart-container">
+                        <canvas id="distribution-chart"></canvas>
+                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Core Mechanics -->
+        <section id="mechanics" class="my-16 scroll-mt-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-2">The Pillars of Power</h2>
+             <p class="text-center text-stone-600 mb-8 max-w-2xl mx-auto">A top-tier Vassal is only as strong as the team around them. Understanding these three core systems—Factions, Classes, and Moon Phases—is essential for building a squad that can conquer any challenge. This section visually breaks down how these mechanics interact to create powerful synergies.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Factions -->
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4 text-center">Factions</h3>
+                    <p class="text-stone-600 mb-4 text-center">Deploying multiple Vassals from the same Faction unlocks powerful passive stat boosts. Aim for a 3-2 split or a full 5-unit team.</p>
+                    <div class="grid grid-cols-2 gap-4 text-center">
+                        <div class="p-3 bg-stone-100 rounded">Ancestors</div>
+                        <div class="p-3 bg-stone-100 rounded">Church</div>
+                        <div class="p-3 bg-stone-100 rounded">Bloodborn</div>
+                        <div class="p-3 bg-stone-100 rounded">Kingdom</div>
+                    </div>
+                </div>
+                <!-- Classes -->
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4 text-center">Classes</h3>
+                     <p class="text-stone-600 mb-4 text-center">A balanced warband is essential. Each class fulfills a vital role, from tanking to healing. A standard team needs a Defender, Enchanter, and DPS.</p>
+                    <div class="grid grid-cols-2 gap-4 text-center">
+                         <div class="p-3 bg-stone-100 rounded">Warrior</div>
+                         <div class="p-3 bg-stone-100 rounded">Assassin</div>
+                         <div class="p-3 bg-stone-100 rounded">Guardian</div>
+                         <div class="p-3 bg-stone-100 rounded">Hunter</div>
+                         <div class="p-3 bg-stone-100 rounded">Sorcerer</div>
+                         <div class="p-3 bg-stone-100 rounded">Enchanter</div>
+                    </div>
+                </div>
+                 <!-- Moon Phases -->
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4 text-center">The Blood Moon</h3>
+                     <p class="text-stone-600 mb-4 text-center">This is the secret weapon. Including one of each Moon Phase in your team triggers the Blood Moon, reducing ultimate costs and boosting damage.</p>
+                    <div id="moon-synergy" class="flex justify-around items-center h-24 bg-stone-800 rounded-lg p-4 transition-all duration-500">
+                        <div class="moon-icon text-4xl text-stone-400" data-moon="Waxing Moon"> crescent_moon </div>
+                        <div class="moon-icon text-4xl text-stone-400" data-moon="Half Moon"> first_quarter_moon </div>
+                        <div class="moon-icon text-4xl text-stone-400" data-moon="Full Moon"> full_moon </div>
+                    </div>
+                    <p id="blood-moon-status" class="text-center font-bold mt-4 text-stone-500 transition-colors duration-500">Align the Moons to activate the buff.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Team Builder -->
+        <section id="team-builder" class="my-16 scroll-mt-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-2">Strategic Team Compositions</h2>
+            <p class="text-center text-stone-600 mb-8 max-w-2xl mx-auto">Theory is nothing without practice. Here are two sample team formations that demonstrate the principles of synergy. See how Faction, Class, and Moon Phase alignment come together to create squads far more powerful than the sum of their parts.</p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Endgame Team -->
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4">End-Game: Blood Moon Annihilation</h3>
+                    <p class="text-stone-600 mb-6">This composition represents a near-perfect end-game PVE team. It activates a 3-Vassal Ancestors bonus, a 2-Vassal Church bonus, and the critical Blood Moon buff for maximum power and survivability.</p>
+                    <div class="space-y-3">
+                        <div class="flex items-center bg-stone-100 p-2 rounded"><strong>Ami: Transcendent</strong><span class="ml-auto text-sm text-stone-500">Guardian | Ancestors | Waxing Moon</span></div>
+                        <div class="flex items-center bg-stone-100 p-2 rounded"><strong>Van Helsing</strong><span class="ml-auto text-sm text-stone-500">Hunter | Church | Full Moon</span></div>
+                        <div class="flex items-center bg-stone-100 p-2 rounded"><strong>Agares: Incendiary</strong><span class="ml-auto text-sm text-stone-500">Sorcerer | Ancestors | Full Moon</span></div>
+                        <div class="flex items-center bg-stone-100 p-2 rounded"><strong>Acappella</strong><span class="ml-auto text-sm text-stone-500">Enchanter | Church | Half Moon</span></div>
+                        <div class="flex items-center bg-stone-100 p-2 rounded"><strong>Seth</strong><span class="ml-auto text-sm text-stone-500">Enchanter | Ancestors | Waxing Moon</span></div>
+                    </div>
+                </div>
+                <!-- F2P Team -->
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4">Progression Core (F2P Friendly)</h3>
+                    <p class="text-stone-600 mb-6">This team leverages guaranteed and accessible Vassals to create a potent force for early and mid-game content. It crucially activates the Blood Moon buff, giving new players a significant power boost to clear content.</p>
+                     <div class="space-y-3">
+                        <div class="flex items-center bg-stone-100 p-2 rounded"><strong>Joan</strong><span class="ml-auto text-sm text-stone-500">Warrior | Church | Half Moon</span></div>
+                        <div class="flex items-center bg-stone-100 p-2 rounded"><strong>Hati</strong><span class="ml-auto text-sm text-stone-500">Assassin | Kingdom | Half Moon</span></div>
+                        <div class="flex items-center bg-stone-100 p-2 rounded"><strong>Empousa</strong><span class="ml-auto text-sm text-stone-500">Sorcerer | Bloodborn | Full Moon</span></div>
+                        <div class="flex items-center bg-stone-100 p-2 rounded"><strong>Aiona</strong><span class="ml-auto text-sm text-stone-500">Enchanter | Bloodborn | Waxing Moon</span></div>
+                        <div class="flex items-center bg-stone-100 p-2 rounded"><strong>Selena</strong><span class="ml-auto text-sm text-stone-500">Hunter | Church | Full Moon</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Top Vassals -->
+        <section id="top-vassals" class="my-16 scroll-mt-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-2">Spotlight: The SSS-Tier Vassals</h2>
+            <p class="text-center text-stone-600 mb-8 max-w-2xl mx-auto">These are the meta-defining Vassals of *Silver and Blood*. Their kits are so powerful and versatile that they form the cornerstone of the most effective teams. Understanding why they are the best is key to understanding the game's high-level strategy.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Vassal Cards -->
+                <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col">
+                    <h3 class="text-2xl font-bold mb-2">Transcendent Noah</h3>
+                    <p class="text-sm font-semibold text-red-800 mb-4">Hunter | Ancestors | Half Moon</p>
+                    <p class="text-stone-600 flex-grow">A premier long-range damage dealer with the game-changing ability to summon allies. These summons provide unparalleled tactical flexibility, serving as disposable tanks, blockers, or extra damage sources.</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col">
+                    <h3 class="text-2xl font-bold mb-2">Agares: Incendiary</h3>
+                    <p class="text-sm font-semibold text-red-800 mb-4">Sorcerer | Ancestors | Full Moon</p>
+                    <p class="text-stone-600 flex-grow">The quintessential AoE mage. Agares unleashes devastating area damage that can obliterate entire enemy waves, making him indispensable for clearing the majority of PVE content efficiently. Also boasts high survivability.</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col">
+                    <h3 class="text-2xl font-bold mb-2">Acappella</h3>
+                    <p class="text-sm font-semibold text-red-800 mb-4">Enchanter | Church | Half Moon</p>
+                    <p class="text-stone-600 flex-grow">The single most valuable support unit. As a force multiplier, she provides a potent mix of team-wide healing and crucial offensive/defensive buffs, forming the backbone of any top-tier team's sustain.</p>
+                </div>
+                 <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col">
+                    <h3 class="text-2xl font-bold mb-2">Seth</h3>
+                    <p class="text-sm font-semibold text-red-800 mb-4">Enchanter | Ancestors | Waxing Moon</p>
+                    <p class="text-stone-600 flex-grow">The fact that two Enchanters reside in SSS-Tier proves the dominance of dual-support compositions. Seth provides unparalleled healing and buffs, ensuring your DPS can operate with maximum aggression.</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col">
+                    <h3 class="text-2xl font-bold mb-2">Van Helsing</h3>
+                    <p class="text-sm font-semibold text-red-800 mb-4">Hunter | Church | Full Moon</p>
+                    <p class="text-stone-600 flex-grow">A high-skill-cap positional damage dealer. His damage skyrockets if no allies are in front of him, rewarding players who master team formation and are willing to take risks for massive payoffs.</p>
+                </div>
+                 <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col">
+                    <h3 class="text-2xl font-bold mb-2">Lamia</h3>
+                    <p class="text-sm font-semibold text-red-800 mb-4">Sorcerer | Kingdom | Full Moon</p>
+                    <p class="text-stone-600 flex-grow">An elite magical damage dealer who complements Agares. Likely specializes in immense single-target burst damage for bosses or applies powerful debuffs to cripple the strongest foes.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-stone-800 text-stone-400 text-center p-6 mt-16">
+        <p>This interactive guide is based on the "Silver and Blood: A Strategic Analysis of Vassal Effectiveness in PVE" report.</p>
+        <p>Data sourced from pre-release and community analysis. The meta is subject to change.</p>
+    </footer>
+
+    <!-- Vassal Detail Modal -->
+    <div id="vassal-modal" class="modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50">
+        <div class="bg-stone-50 w-full max-w-lg mx-auto rounded-lg shadow-xl overflow-hidden">
+            <div id="modal-content" class="p-6">
+                <!-- JS will populate this -->
+            </div>
+            <div class="bg-stone-100 p-4 text-right">
+                 <button id="modal-close-button" class="close-button px-4 py-2 rounded">Close</button>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+const vassalData = [
+    { tier: 'SSS', name: 'Acappella', rarity: 'SSR', faction: 'Church', class: 'Enchanter', moon: 'Half Moon' },
+    { tier: 'SSS', name: 'Agares: Incendiary', rarity: 'SSR+', faction: 'Ancestors', class: 'Sorcerer', moon: 'Full Moon' },
+    { tier: 'SSS', name: 'Ami: Transcendent', rarity: 'SSR+', faction: 'Ancestors', class: 'Guardian', moon: 'Waxing Moon' },
+    { tier: 'SSS', name: 'Lamia', rarity: 'SSR', faction: 'Kingdom', class: 'Sorcerer', moon: 'Full Moon' },
+    { tier: 'SSS', name: 'Noah: Transcendent', rarity: 'SSR+', faction: 'Ancestors', class: 'Hunter', moon: 'Half Moon' },
+    { tier: 'SSS', name: 'Seth', rarity: 'SSR', faction: 'Ancestors', class: 'Enchanter', moon: 'Waxing Moon' },
+    { tier: 'SSS', name: 'Van Helsing', rarity: 'SSR', faction: 'Church', class: 'Hunter', moon: 'Full Moon' },
+    { tier: 'S', name: 'Ami', rarity: 'SSR', faction: 'Kingdom', class: 'Enchanter', moon: 'Half Moon' },
+    { tier: 'S', name: 'Bella', rarity: 'SSR', faction: 'Bloodborn', class: 'Sorcerer', moon: 'Full Moon' },
+    { tier: 'S', name: 'Darcias', rarity: 'SSR', faction: 'Church', class: 'Warrior', moon: 'Half Moon' },
+    { tier: 'S', name: 'Gilrain', rarity: 'SSR', faction: 'Kingdom', class: 'Assassin', moon: 'Half Moon' },
+    { tier: 'S', name: 'Hati: Transcendent', rarity: 'SSR+', faction: 'Ancestors', class: 'Warrior', moon: 'Full Moon' },
+    { tier: 'S', name: 'Limine', rarity: 'SSR', faction: 'Ancestors', class: 'Sorcerer', moon: 'Full Moon' },
+    { tier: 'S', name: 'Nicole', rarity: 'SSR', faction: 'Church', class: 'Assassin', moon: 'Half Moon' },
+    { tier: 'S', name: 'Piera', rarity: 'SSR', faction: 'Church', class: 'Sorcerer', moon: 'Full Moon' },
+    { tier: 'S', name: 'Starry-Eyed Aiona', rarity: 'SSR', faction: 'Kingdom', class: 'Enchanter', moon: 'Waxing Moon' },
+    { tier: 'S', name: 'Thibault', rarity: 'SSR', faction: 'Church', class: 'Sorcerer', moon: 'Full Moon' },
+    { tier: 'S', name: 'Spectral Gilrain', rarity: 'SSR', faction: 'Bloodborn', class: 'Assassin', moon: 'Half Moon' },
+    { tier: 'A', name: 'Agares', rarity: 'SSR', faction: 'Church', class: 'Sorcerer', moon: 'Full Moon' },
+    { tier: 'A', name: 'Augustine', rarity: 'SSR', faction: 'Bloodborn', class: 'Warrior', moon: 'Half Moon' },
+    { tier: 'A', name: 'Cain', rarity: 'SSR', faction: 'Bloodborn', class: 'Sorcerer', moon: 'Full Moon' },
+    { tier: 'A', name: 'Cecia', rarity: 'SSR', faction: 'Kingdom', class: 'Sorcerer', moon: 'Full Moon' },
+    { tier: 'A', name: 'Dalcarlo', rarity: 'SSR', faction: 'Bloodborn', class: 'Sorcerer', moon: 'Full Moon' },
+    { tier: 'A', name: 'Edina', rarity: 'SSR', faction: 'Church', class: 'Enchanter', moon: 'Waxing Moon' },
+    { tier: 'A', name: 'Friedrich', rarity: 'SSR', faction: 'Kingdom', class: 'Guardian', moon: 'Waxing Moon' },
+    { tier: 'A', name: 'Hati', rarity: 'SSR', faction: 'Kingdom', class: 'Assassin', moon: 'Half Moon' },
+    { tier: 'A', name: 'Jestel', rarity: 'SR', faction: 'Bloodborn', class: 'Guardian', moon: 'Waxing Moon' },
+    { tier: 'A', name: 'Ressa', rarity: 'SR', faction: 'Kingdom', class: 'Warrior', moon: 'Half Moon' },
+    { tier: 'A', name: 'Selena', rarity: 'SR', faction: 'Church', class: 'Hunter', moon: 'Full Moon' },
+    { tier: 'A', name: 'Theophane', rarity: 'SSR', faction: 'Church', class: 'Guardian', moon: 'Waxing Moon' },
+    { tier: 'B', name: 'Aiona', rarity: 'SR', faction: 'Bloodborn', class: 'Enchanter', moon: 'Waxing Moon' },
+    { tier: 'B', name: 'Baphomet', rarity: 'SR', faction: 'Bloodborn', class: 'Warrior', moon: 'Half Moon' },
+    { tier: 'B', name: 'Empousa', rarity: 'SR', faction: 'Bloodborn', class: 'Sorcerer', moon: 'Full Moon' },
+    { tier: 'B', name: 'Joan', rarity: 'SR', faction: 'Church', class: 'Warrior', moon: 'Half Moon' },
+    { tier: 'B', name: 'Mass', rarity: 'SSR', faction: 'Bloodborn', class: 'Assassin', moon: 'Half Moon' },
+    { tier: 'B', name: 'Ottavia', rarity: 'SR', faction: 'Church', class: 'Warrior', moon: 'Half Moon' },
+    { tier: 'B', name: 'Pavana', rarity: 'SR', faction: 'Church', class: 'Enchanter', moon: 'Half Moon' },
+    { tier: 'B', name: 'Tris', rarity: 'SR', faction: 'Church', class: 'Hunter', moon: 'Full Moon' },
+    { tier: 'B', name: 'Yggdrasill', rarity: 'SSR', faction: 'Church', class: 'Guardian', moon: 'Waxing Moon' },
+    { tier: 'C', name: 'Clive', rarity: 'SR', faction: 'Kingdom', class: 'Guardian', moon: 'Half Moon' },
+    { tier: 'C', name: 'Gadric', rarity: 'SR', faction: 'Church', class: 'Warrior', moon: 'Half Moon' },
+    { tier: 'C', name: 'Goldland', rarity: 'SR', faction: 'Kingdom', class: 'Hunter', moon: 'Full Moon' },
+    { tier: 'C', name: 'Noah', rarity: 'SR', faction: 'Bloodborn', class: 'Warrior', moon: 'Half Moon' },
+    { tier: 'F', name: 'Clive JR.', rarity: 'SR', faction: 'Kingdom', class: 'Sorcerer', moon: 'Full Moon' },
+    { tier: 'F', name: 'Setti', rarity: 'SR', faction: 'Bloodborn', class: 'Hunter', moon: 'Full Moon' },
+];
+
+const vassalDetails = {
+    'Joan': 'Discrepancy in ranking exists. Ranked SSS elsewhere, likely for PvP or early-game dominance. For PVE end-game, she is a solid early investment but falls off compared to specialized tanks. A versatile and resilient frontline unit.',
+    'Van Helsing': 'Exemplifies positional strategy. Deals significantly more damage if no allies are in the two tiles in front of him, rewarding careful, high-risk team formations.',
+    'Noah: Transcendent': 'Premier physical DPS who can also summon allies. These summons provide immense tactical value as blockers, decoys, or extra damage sources, offering unparalleled board control.',
+    'Agares: Incendiary': 'The game\'s top AoE magical DPS. Essential for clearing waves of enemies quickly and efficiently. His high survivability makes him less reliant on constant protection.',
+    'Acappella': 'The cornerstone of any top-tier team. Provides powerful healing and a suite of offensive and defensive buffs that multiply the effectiveness of the entire team. Arguably the highest priority Vassal to acquire.',
+};
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const tierListBody = document.getElementById('tier-list-body');
+    const nameSearch = document.getElementById('name-search');
+    const tierFilter = document.getElementById('tier-filter');
+    const factionFilter = document.getElementById('faction-filter');
+    const classFilter = document.getElementById('class-filter');
+    const moonFilter = document.getElementById('moon-filter');
+    const modal = document.getElementById('vassal-modal');
+    const modalContent = document.getElementById('modal-content');
+    const modalCloseButton = document.getElementById('modal-close-button');
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    const tierOrder = ['SSS', 'S', 'A', 'B', 'C', 'F'];
+    const factionOrder = ['Ancestors', 'Church', 'Bloodborn', 'Kingdom'];
+    const classOrder = ['Guardian', 'Warrior', 'Assassin', 'Hunter', 'Sorcerer', 'Enchanter'];
+    const moonOrder = ['Waxing Moon', 'Half Moon', 'Full Moon'];
+
+    function populateFilters() {
+        tierOrder.forEach(tier => {
+            tierFilter.innerHTML += `<option value="${tier}">${tier}</option>`;
+        });
+        factionOrder.forEach(faction => {
+            factionFilter.innerHTML += `<option value="${faction}">${faction}</option>`;
+        });
+        classOrder.forEach(cls => {
+            classFilter.innerHTML += `<option value="${cls}">${cls}</option>`;
+        });
+        moonOrder.forEach(moon => {
+            moonFilter.innerHTML += `<option value="${moon}">${moon}</option>`;
+        });
+    }
+
+    function renderTable(filteredData) {
+        tierListBody.innerHTML = '';
+        if (filteredData.length === 0) {
+            tierListBody.innerHTML = `<tr><td colspan="5" class="text-center p-8 text-stone-500">No Vassals match the current filters.</td></tr>`;
+            return;
+        }
+
+        filteredData.sort((a, b) => {
+            if (tierOrder.indexOf(a.tier) !== tierOrder.indexOf(b.tier)) {
+                return tierOrder.indexOf(a.tier) - tierOrder.indexOf(b.tier);
+            }
+            return a.name.localeCompare(b.name);
+        });
+
+        filteredData.forEach(vassal => {
+            const row = document.createElement('tr');
+            row.className = `border-b border-stone-200 hover:bg-stone-100 cursor-pointer tier-${vassal.tier.toLowerCase()} border-l-4`;
+            row.innerHTML = `
+                <td class="p-3 font-bold">${vassal.name} <span class="font-normal text-stone-500">${vassal.rarity}</span></td>
+                <td class="p-3"><span class="font-bold text-sm">${vassal.tier}</span></td>
+                <td class="p-3">${vassal.faction}</td>
+                <td class="p-3">${vassal.class}</td>
+                <td class="p-3">${vassal.moon}</td>
+            `;
+            row.addEventListener('click', () => showModal(vassal));
+            tierListBody.appendChild(row);
+        });
+    }
+    
+    function showModal(vassal) {
+        modal.style.display = 'flex';
+        const detailText = vassalDetails[vassal.name] || 'A capable Vassal effective in their designated role.';
+        modalContent.innerHTML = `
+            <h3 class="text-3xl font-bold mb-2 font-cinzel">${vassal.name}</h3>
+            <div class="flex flex-wrap gap-x-4 gap-y-2 mb-4 text-stone-600">
+                <span><strong>Tier:</strong> ${vassal.tier}</span>
+                <span><strong>Rarity:</strong> ${vassal.rarity}</span>
+                <span><strong>Faction:</strong> ${vassal.faction}</span>
+                <span><strong>Class:</strong> ${vassal.class}</span>
+                <span><strong>Moon:</strong> ${vassal.moon}</span>
+            </div>
+            <h4 class="font-bold text-lg mt-4 mb-2">Strategic Analysis</h4>
+            <p class="text-stone-700">${detailText}</p>
+        `;
+    }
+
+    function hideModal() {
+        modal.style.display = 'none';
+    }
+
+    let distributionChart;
+    function renderChart(filteredData) {
+        const ctx = document.getElementById('distribution-chart').getContext('2d');
+        const distribution = filteredData.reduce((acc, vassal) => {
+            const key = factionFilter.value !== 'all' ? vassal.class : vassal.faction;
+            acc[key] = (acc[key] || 0) + 1;
+            return acc;
+        }, {});
+
+        if (distributionChart) {
+            distributionChart.destroy();
+        }
+
+        distributionChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(distribution),
+                datasets: [{
+                    label: 'Vassal Distribution',
+                    data: Object.values(distribution),
+                    backgroundColor: [
+                        '#78716c', // stone-500
+                        '#a8a29e', // stone-400
+                        '#d6d3d1', // stone-300
+                        '#e7e5e4', // stone-200
+                        '#fca5a5', // red-300
+                        '#b45309', // amber-700
+                    ],
+                    borderColor: '#F5F5F4',
+                    borderWidth: 4,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    tooltip: {
+                         callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    label += context.parsed;
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function filterAndRender() {
+        const nameQuery = nameSearch.value.toLowerCase();
+        const tierQuery = tierFilter.value;
+        const factionQuery = factionFilter.value;
+        const classQuery = classFilter.value;
+        const moonQuery = moonFilter.value;
+
+        const filtered = vassalData.filter(v => {
+            return (nameQuery === '' || v.name.toLowerCase().includes(nameQuery)) &&
+                   (tierQuery === 'all' || v.tier === tierQuery) &&
+                   (factionQuery === 'all' || v.faction === factionQuery) &&
+                   (classQuery === 'all' || v.class === classQuery) &&
+                   (moonQuery === 'all' || v.moon === moonQuery);
+        });
+
+        renderTable(filtered);
+        renderChart(filtered);
+    }
+
+    populateFilters();
+    filterAndRender();
+
+    [nameSearch, tierFilter, factionFilter, classFilter, moonFilter].forEach(el => {
+        el.addEventListener('input', filterAndRender);
+    });
+    
+    modalCloseButton.addEventListener('click', hideModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            hideModal();
+        }
+    });
+
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    // Moon synergy animation
+    const moonIcons = document.querySelectorAll('.moon-icon');
+    let selectedMoons = new Set();
+
+    moonIcons.forEach(icon => {
+        icon.addEventListener('click', () => {
+            const moonPhase = icon.dataset.moon;
+            if (selectedMoons.has(moonPhase)) {
+                selectedMoons.delete(moonPhase);
+                icon.classList.remove('text-yellow-300');
+                icon.classList.add('text-stone-400');
+            } else {
+                selectedMoons.add(moonPhase);
+                icon.classList.remove('text-stone-400');
+                icon.classList.add('text-yellow-300');
+            }
+            updateBloodMoonStatus();
+        });
+    });
+
+    function updateBloodMoonStatus() {
+        const statusText = document.getElementById('blood-moon-status');
+        const synergyBox = document.getElementById('moon-synergy');
+        if (selectedMoons.size === 3) {
+            statusText.textContent = 'Blood Moon Activated!';
+            statusText.classList.remove('text-stone-500');
+            statusText.classList.add('text-red-500');
+            synergyBox.classList.remove('bg-stone-800');
+            synergyBox.classList.add('bg-red-900');
+        } else {
+            statusText.textContent = 'Align the Moons to activate the buff.';
+            statusText.classList.remove('text-red-500');
+            statusText.classList.add('text-stone-500');
+            synergyBox.classList.remove('bg-red-900');
+            synergyBox.classList.add('bg-stone-800');
+        }
+    }
+});
+</script>
+</body>
+</html>
